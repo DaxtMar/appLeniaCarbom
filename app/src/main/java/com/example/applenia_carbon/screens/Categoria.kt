@@ -3,6 +3,7 @@ package com.example.applenia_carbon.screens
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
@@ -33,19 +34,9 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import com.example.applenia_carbon.dataEjemplo.dataCategoria
+import com.example.applenia_carbon.dataEjemplo.listaCategorias
 
-data class dataCategoria(val imageResId: Int, val name: String)
-
-val listaCategorias = listOf(
-    dataCategoria(R.drawable.pro1, "Promociones"),
-    dataCategoria(R.drawable.fc1, "Festival de cuartos"),
-    dataCategoria(R.drawable.pb1, "pollo a la brasa"),
-    dataCategoria(R.drawable.cp1, "carnes parrillas"),
-    dataCategoria(R.drawable.cl1, "Complementos"),
-    dataCategoria(R.drawable.ep1, "Entradas y piqueos"),
-    dataCategoria(R.drawable.pc1, "Postres"),
-    dataCategoria(R.drawable.bb1, "Bebidas"),
-)
 
 @Composable
 fun CategoriaScreen() {
@@ -55,9 +46,11 @@ fun CategoriaScreen() {
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+        Box(modifier = Modifier.padding(start = 10.dp, end = 10.dp)) {
+            buscar()
+            Spacer(Modifier.size(15.dp))
+        }
 
-        buscar()
-        Spacer(Modifier.size(15.dp))
         CategoriaGrid(listaCategorias)
     }
 }
