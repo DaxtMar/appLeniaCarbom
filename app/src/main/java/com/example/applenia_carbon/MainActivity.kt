@@ -29,7 +29,7 @@ class MainActivity : ComponentActivity() {
             Applenia_carbonTheme {
                 val navigation = rememberNavController()
                 NavHost(navController = navigation,
-                    startDestination = AppRoutes.loginScreen.path,
+                    startDestination = AppRoutes.welcomeScreen.path,
                     builder = {
                         composable(AppRoutes.welcomeScreen.path) {
                             WelcomeScreen(navigation)

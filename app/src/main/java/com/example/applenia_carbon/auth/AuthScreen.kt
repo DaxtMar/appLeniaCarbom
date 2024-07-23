@@ -1,6 +1,7 @@
 package com.example.applenia_carbon.auth
 
 import android.app.Activity
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -12,6 +13,8 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.Key
+import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.Button
@@ -35,11 +38,13 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.example.applenia_carbon.R
 import com.example.applenia_carbon.routes.AppRoutes
 import kotlinx.coroutines.launch
 
@@ -54,6 +59,7 @@ fun authScreen(authViewModel: AuthViewModel, navController: NavController) {
                 .padding(paddingInit)
                 .fillMaxSize()
         ) {
+
             header(Modifier.align(Alignment.Center))
             body(
                 modifier = Modifier.align(Alignment.Center),
@@ -68,7 +74,7 @@ fun header(modifier: Modifier) {
     val activity = LocalContext.current as Activity
     Icon(imageVector = Icons.Default.Close,
         contentDescription = "",
-        modifier = Modifier.clickable { activity.finish() })
+        modifier = modifier.clickable { activity.finish() })
 }
 
 @Composable
@@ -81,12 +87,13 @@ fun body(
 
     val password: String by authViewModel.password.observeAsState(initial = "")
 
-    Column(/*modifier.padding(start = 10.dp, end = 10.dp)*/
+    Column(
             modifier = modifier.padding(start = 10.dp, end = 10.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = androidx.compose.foundation.layout.Arrangement.Center // Ajuste aquí
     ) {
-        Spacer(Modifier.size(15.dp))
+        imagenLogo(modifier = Modifier.align(Alignment.CenterHorizontally))
+        Spacer(Modifier.size(10.dp))
         txtUsuario(usuario) { authViewModel.onLoginValueChanged(it, password) }
         Spacer(Modifier.size(15.dp))
         txtPassword(password) { authViewModel.onLoginValueChanged(usuario, it) }
@@ -110,7 +117,17 @@ fun txtUsuario(usuario: String, onTextChanged: (String) -> Unit) {
         modifier = Modifier.fillMaxWidth(),
         label = { Text(text = "Usuario") },
         maxLines = 1,
+        leadingIcon = { Icon(imageVector = Icons.Default.Person, contentDescription = "persona") },
         singleLine = true
+    )
+}
+
+@Composable
+fun imagenLogo(modifier: Modifier) {
+    Image(
+        painter = painterResource(id = R.drawable.lenaycarbon),
+        contentDescription = "logo",
+        modifier = modifier
     )
 }
 
@@ -125,6 +142,7 @@ fun txtPassword(password: String, onTextChanged: (String) -> Unit) {
         label = { Text(text = "Password") },
         maxLines = 1,
         singleLine = true,
+        leadingIcon = { Icon(imageVector = Icons.Default.Key, contentDescription = "persona") },
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
         trailingIcon = {
             val icon = if (visible) {

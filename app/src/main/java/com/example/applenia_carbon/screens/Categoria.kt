@@ -92,7 +92,7 @@ fun CategoriaItem(dataCategoria: dataCategoria) {
         modifier = Modifier
             .fillMaxWidth()
             .clickable { /**/ },
-        verticalArrangement = Arrangement.Center
+        verticalArrangement = Arrangement.Center,
     ) {
         Image(
             painter = painterResource(id = dataCategoria.imageResId),
