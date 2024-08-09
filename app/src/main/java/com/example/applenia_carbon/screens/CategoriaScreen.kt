@@ -28,7 +28,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.applenia_carbon.R
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -39,7 +38,7 @@ import com.example.applenia_carbon.dataEjemplo.listaCategorias
 
 
 @Composable
-fun CategoriaScreen() {
+fun categoriaScreen() {
 
     Column(
         modifier = Modifier.fillMaxSize(),

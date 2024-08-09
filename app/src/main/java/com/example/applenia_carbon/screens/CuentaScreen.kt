@@ -18,7 +18,7 @@ import androidx.compose.ui.text.font.FontWeight
 import com.example.applenia_carbon.MainActivity
 
 @Composable
-fun CuentaScreen() {
+fun cuentaScreen() {
     var selectedTab by remember { mutableStateOf(0) }
 
     Column(modifier = Modifier.fillMaxSize()) {

@@ -1,7 +1,6 @@
 package com.example.applenia_carbon.screens
 
 
-import android.util.Log
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -38,32 +37,38 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight.Companion.Bold
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.example.applenia_carbon.R
+import com.example.applenia_carbon.dataEjemplo.Producto
 import com.example.applenia_carbon.dataEjemplo.listaCategorias
 import com.example.applenia_carbon.dataEjemplo.listaProductos
-import com.example.applenia_carbon.dataEjemplo.producto
+
+import com.example.applenia_carbon.routes.AppRoutes
 import com.example.applenia_carbon.screens.tienda.carousel
 
 @Composable
-fun TiendaScreen() {
+fun tiendaScreen(navController: NavController) {
 
     Column(
         modifier = Modifier.fillMaxSize(),
     ) {
-        LazyColumnExample()
+        LazyColumnExample(navController = navController)
     }
 }
 
 @Composable
 fun ColumnItem(
     modifier: Modifier,
-    producto: producto,
+    producto: Producto,
+    navController: NavController
 ) {
     Card(
         modifier
             .padding(10.dp)
             .wrapContentSize()
-            .clickable {/**/ },
+            .clickable {
+                navController.navigate(AppRoutes.detalleScreen.paramDetalle(producto.idp - 1))
+            },
         colors = CardDefaults.cardColors(
             containerColor = Color.White
         ),
@@ -95,7 +100,7 @@ fun ColumnItem(
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun LazyColumnExample(modifier: Modifier = Modifier) {
+fun LazyColumnExample(modifier: Modifier = Modifier, navController: NavController) {
     Column {
         LazyColumn(
             Modifier.padding(start = 10.dp, end = 10.dp),
@@ -120,7 +125,7 @@ fun LazyColumnExample(modifier: Modifier = Modifier) {
                     carousel()
                     Spacer(Modifier.size(10.dp))
                 })
-                val agrupa = listaProductos.groupBy {(it.idp- 1) / 4 + 1  }
+                val agrupa = listaProductos.groupBy { (it.idp - 1) / 4 + 1 }
                 agrupa.entries.forEach { entry ->
                     stickyHeader {
                         Row(
@@ -136,7 +141,7 @@ fun LazyColumnExample(modifier: Modifier = Modifier) {
                             )
                         }
                     }
-                    items(entry.value) {item  ->
+                    items(entry.value) { item ->
                         Row(
                             verticalAlignment = Alignment.CenterVertically,
                             modifier = Modifier
@@ -151,7 +156,8 @@ fun LazyColumnExample(modifier: Modifier = Modifier) {
                             ) {
                                 ColumnItem(
                                     modifier,
-                                    item
+                                    item,
+                                    navController
                                 )
                             }
                         }

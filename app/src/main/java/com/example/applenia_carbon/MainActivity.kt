@@ -5,8 +5,6 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -15,7 +13,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.example.applenia_carbon.auth.AuthViewModel
 import com.example.applenia_carbon.auth.authScreen
-import com.example.applenia_carbon.menu.homeScreen
+import com.example.applenia_carbon.screens.homeScreen
 import com.example.applenia_carbon.routes.AppRoutes
 import com.example.applenia_carbon.screens.RegistroScreen
 import com.example.applenia_carbon.screens.WelcomeScreen
