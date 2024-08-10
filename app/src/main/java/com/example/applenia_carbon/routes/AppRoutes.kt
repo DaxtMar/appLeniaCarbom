@@ -17,4 +17,5 @@ sealed class AppRoutes (val path: String) {
     }
 
     object carritoScreen : AppRoutes("carritoScreen")
+    object pasarelaScreen : AppRoutes("pasarelaScreen")
 }

@@ -91,7 +91,7 @@ fun ColumnItem(
             Column(modifier.padding(12.dp)) {
                 Text(text = producto.title, fontSize = 20.sp, fontWeight = Bold)
                 Text(text = producto.descripcion, fontSize = 16.sp)
-                Text(text = producto.precio, fontSize = 18.sp, fontWeight = Bold)
+                Text(text = producto.precio.toString(), fontSize = 18.sp, fontWeight = Bold)
                 //Text(text = producto.idp.toString(), fontSize = 12.sp)
             }
         }

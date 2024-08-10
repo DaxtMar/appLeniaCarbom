@@ -7,7 +7,7 @@ data class Producto(
     val image: Int,
     var title: String,
     var descripcion: String,
-    var precio: String,
+    var precio: Double,
     val index: Int = 0
 )
 

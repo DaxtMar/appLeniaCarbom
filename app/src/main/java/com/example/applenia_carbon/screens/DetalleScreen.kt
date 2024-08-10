@@ -17,8 +17,13 @@ import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.material3.SnackbarDuration
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -31,6 +36,7 @@ import androidx.navigation.NavController
 import com.example.applenia_carbon.dataEjemplo.Producto
 import com.example.applenia_carbon.dataEjemplo.listaProductos
 import com.example.applenia_carbon.screens.viewmodel.CartViewModel
+import kotlinx.coroutines.launch
 
 @Composable
 fun DetalleScreen(
@@ -39,6 +45,8 @@ fun DetalleScreen(
     navController: NavController,
     cartViewModel: CartViewModel,
 ) {
+    val snackbarHostState = remember { SnackbarHostState() }
+    val coroutineScope = rememberCoroutineScope()
     Column(
         modifier
             .fillMaxSize()
@@ -78,15 +86,30 @@ fun DetalleScreen(
         }
         Text(text = listaProductos.get(id).title, fontSize = 20.sp, fontWeight = FontWeight.Bold)
         Text(text = listaProductos.get(id).descripcion, fontSize = 16.sp)
-        Text(text = listaProductos.get(id).idp.toString(), fontSize = 16.sp)
-        Text(text = listaProductos.get(id).precio, fontSize = 18.sp, fontWeight = FontWeight.Bold)
-        val producto:Producto = listaProductos.get(id)
-        Spacer(modifier = Modifier.height(16.dp))
-        Button(onClick = {
-            cartViewModel.addProductToCart(producto)
-            //navController.popBackStack() // Volver a la lista de productos
-        }) {
+        //Text(text = listaProductos.get(id).idp.toString(), fontSize = 16.sp)
+        Text(text = listaProductos.get(id).precio.toString(), fontSize = 18.sp, fontWeight = FontWeight.Bold)
+        val producto: Producto = listaProductos.get(id)
+        Spacer(modifier = Modifier.height(6.dp))
+        Button(
+            onClick = {
+                cartViewModel.addProductToCart(producto)
+                coroutineScope.launch {
+                    snackbarHostState.showSnackbar(
+                        message = "Agregado",
+                        actionLabel = "OK", duration = SnackbarDuration.Short
+                    )
+                }
+
+            },
+            modifier
+            = Modifier.fillMaxWidth()
+        ) {
             Text("Agregar al carrito")
         }
+        SnackbarHost(
+            modifier = Modifier.align(Alignment.CenterHorizontally),
+            hostState = snackbarHostState,
+            //modifier = Modifier.align(Alignment.BottomEnd)
+        )
     }
 }

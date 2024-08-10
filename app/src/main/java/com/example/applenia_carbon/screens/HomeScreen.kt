@@ -76,7 +76,7 @@ fun homeScreen(id: Int) {
                         cuentaScreen()
                     }
                     composable(route = AppRoutes.carritoScreen.path) {
-                        carritoScreen(cartViewModel = cartViewModel)
+                        carritoScreen(cartViewModel = cartViewModel, navController)
                     }
 
                     composable(
@@ -88,6 +88,10 @@ fun homeScreen(id: Int) {
                             id = params.arguments?.getInt("idp") ?: 0,
                             navController = navController, cartViewModel = cartViewModel
                         )
+                    }
+
+                    composable(route = AppRoutes.pasarelaScreen.path) {
+                        pasarelaScreen(cartViewModel = cartViewModel)
                     }
                 }
             }

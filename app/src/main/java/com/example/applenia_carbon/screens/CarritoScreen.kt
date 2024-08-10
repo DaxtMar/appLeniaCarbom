@@ -1,5 +1,6 @@
 package com.example.applenia_carbon.screens
 
+import android.os.Bundle
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -30,20 +31,18 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
 import com.example.applenia_carbon.R
 import com.example.applenia_carbon.dataEjemplo.CartItem
 import com.example.applenia_carbon.dataEjemplo.listaProductos
+import com.example.applenia_carbon.routes.AppRoutes
 import com.example.applenia_carbon.screens.viewmodel.CartViewModel
 
 @Composable
-fun carritoScreen(cartViewModel: CartViewModel) {
-    CartScreen(cartViewModel = cartViewModel)
-}
-
-@Composable
-fun CartScreen(cartViewModel: CartViewModel) {
+fun carritoScreen(cartViewModel: CartViewModel, navController: NavController) {
 
     val cartItems = cartViewModel.cartItems
     Column(modifier = Modifier.padding(16.dp)) {
@@ -67,7 +66,9 @@ fun CartScreen(cartViewModel: CartViewModel) {
             Spacer(modifier = Modifier.height(16.dp))
 
             Button(
-                onClick = { /*ir a pagar */ },
+                onClick = {
+                    navController.navigate(AppRoutes.pasarelaScreen.path)
+                },
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(50.dp)
@@ -167,14 +168,8 @@ fun EmptyCartView() {
     ) {
         Text(
             text = "Tu Carrito esta vacio",
-            color = Color.Red,
-
-            )
-        Spacer(modifier = Modifier.height(16.dp))
-        Text(
-            text = "No te puedes perder las ofertas que tenemos!",
-            color = Color.Red,
-
-            )
+            color = Color.Gray,
+            fontSize = 20.sp,
+        )
     }
 }
