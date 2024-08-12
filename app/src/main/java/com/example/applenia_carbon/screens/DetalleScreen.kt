@@ -22,19 +22,27 @@ import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import coil.compose.rememberAsyncImagePainter
+import coil.request.ImageRequest
+import com.example.applenia_carbon.R
 import com.example.applenia_carbon.dataEjemplo.Producto
 import com.example.applenia_carbon.dataEjemplo.listaProductos
+import com.example.applenia_carbon.home.data.network.response.ProductoResponse
+import com.example.applenia_carbon.home.viewmodel.HomeViewModel
 import com.example.applenia_carbon.screens.viewmodel.CartViewModel
 import kotlinx.coroutines.launch
 
@@ -44,9 +52,11 @@ fun DetalleScreen(
     id: Int,
     navController: NavController,
     cartViewModel: CartViewModel,
+    homeViewModel: HomeViewModel
 ) {
     val snackbarHostState = remember { SnackbarHostState() }
     val coroutineScope = rememberCoroutineScope()
+    val productos by homeViewModel.productoResponse.observeAsState(emptyList())
     Column(
         modifier
             .fillMaxSize()
@@ -61,9 +71,17 @@ fun DetalleScreen(
             contentAlignment = Alignment.Center
         ) {
             Image(
-
-                painter = painterResource(id = listaProductos.get(id).image),
-                contentDescription = listaProductos.get(id).title,
+                //painter = painterResource(id = listaProductos.get(id).image),
+                painter = rememberAsyncImagePainter(
+                    ImageRequest.Builder(LocalContext.current)
+                        .data(data = productos.get(id).imagen)
+                        .apply(block = fun ImageRequest.Builder.() {
+                            crossfade(true)
+                            placeholder(R.drawable.lenaycarbon)
+                        }).build()
+                ),
+                //painter = painterResource(id = R.drawable.lenaycarbon),
+                contentDescription = productos.get(id).nombre,
                 modifier.clip(RoundedCornerShape(16.dp))
             )
             Button(
@@ -84,11 +102,12 @@ fun DetalleScreen(
                 )
             }
         }
-        Text(text = listaProductos.get(id).title, fontSize = 20.sp, fontWeight = FontWeight.Bold)
-        Text(text = listaProductos.get(id).descripcion, fontSize = 16.sp)
-        //Text(text = listaProductos.get(id).idp.toString(), fontSize = 16.sp)
-        Text(text = listaProductos.get(id).precio.toString(), fontSize = 18.sp, fontWeight = FontWeight.Bold)
-        val producto: Producto = listaProductos.get(id)
+        //Text(text = listaProductos.get(id).title, fontSize = 20.sp, fontWeight = FontWeight.Bold)
+        Text(text = productos.get(id).nombre, fontSize = 20.sp, fontWeight = FontWeight.Bold)
+        Text(text = productos.get(id).descripcion, fontSize = 16.sp)
+
+        Text(text = productos.get(id).precio.toString(), fontSize = 18.sp, fontWeight = FontWeight.Bold)
+        val producto: ProductoResponse = productos.get(id)
         Spacer(modifier = Modifier.height(6.dp))
         Button(
             onClick = {

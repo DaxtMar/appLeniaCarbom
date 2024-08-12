@@ -19,7 +19,12 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -36,18 +41,35 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.example.applenia_carbon.Models.Usuario
 import com.example.applenia_carbon.core.utils.MenuItem
+import com.example.applenia_carbon.home.viewmodel.HomeViewModel
 import com.example.applenia_carbon.routes.AppRoutes
+import com.example.applenia_carbon.routes.opcionesApp
 import com.example.applenia_carbon.screens.viewmodel.CartViewModel
+import kotlinx.coroutines.launch
 
 @Composable
-fun homeScreen(id: Int) {
+fun homeScreen(id: Int,homeViewModel: HomeViewModel) {
     val navController = rememberNavController()
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentDestination = navBackStackEntry?.destination
     val cartViewModel: CartViewModel = viewModel()
-    Scaffold(
 
+    // Estado para almacenar el usuario
+    val user = remember { mutableStateOf<Usuario?>(null) }
+    val coroutineScope = rememberCoroutineScope()
+
+    // Cargar los datos del usuario
+    LaunchedEffect(id) {
+        coroutineScope.launch {
+            // Aquí deberías implementar la lógica para recuperar el usuario basado en el id
+            // Simulación de la recuperación del usuario
+            user.value = Usuario(id, "Nombre", "email@example.com", "password", "Dirección", "Teléfono")
+        }
+    }
+
+    Scaffold(
         topBar = { MyToolBar() },
         bottomBar = {
             EjemploBottomBar(
@@ -66,14 +88,16 @@ fun homeScreen(id: Int) {
                     navController = navController,
                     startDestination = AppRoutes.tiendaScreen.path
                 ) {
-                    composable(route = AppRoutes.tiendaScreen.path) {
-                        tiendaScreen(navController)
+                    composable(route = AppRoutes.tiendaScreen.path) { backStackEntry ->
+                        val categoriaIndex =
+                            backStackEntry.arguments?.getString("categoriaIndex")?.toIntOrNull()
+                        tiendaScreen(navController, categoriaIndex,homeViewModel)
                     }
                     composable(route = AppRoutes.categoriaScreen.path) {
-                        categoriaScreen()
+                        categoriaScreen(navController,homeViewModel)
                     }
                     composable(route = AppRoutes.cuentaScreen.path) {
-                        cuentaScreen()
+                        cuentaScreen(user = user.value)
                     }
                     composable(route = AppRoutes.carritoScreen.path) {
                         carritoScreen(cartViewModel = cartViewModel, navController)
@@ -86,7 +110,8 @@ fun homeScreen(id: Int) {
                     ) { params ->
                         DetalleScreen(
                             id = params.arguments?.getInt("idp") ?: 0,
-                            navController = navController, cartViewModel = cartViewModel
+                            navController = navController, cartViewModel = cartViewModel,
+                            homeViewModel=homeViewModel
                         )
                     }
 
@@ -104,13 +129,10 @@ fun MyToolBar() {
     TopAppBar(title = { Text(text = "Leña y Carbón") }, colors = TopAppBarDefaults.topAppBarColors(
         containerColor = Color.Red,
         titleContentColor = Color.White
-
     ),
         navigationIcon = {
-
         },
         actions = {
-
         }
     )
 }
@@ -121,7 +143,9 @@ fun EjemploBottomBar(
     navController: NavHostController
 ) {
     val screens = opcionesMenu()
-
+    var opcionSeleccionada by remember {
+        mutableStateOf(0)
+    }
     BottomAppBar(
         containerColor = Color.Red,
         contentColor = Color.White,
@@ -132,16 +156,27 @@ fun EjemploBottomBar(
                 selected = currentDestination?.hierarchy?.any {
                     it.route == opcion.path
                 } == true,
+                //selected = opcionSeleccionada == index,
+                //selected = opcionesApp().get(index).nombre == opcion.titulo,
                 colors = NavigationBarItemDefaults.colors(
                     selectedIconColor = Color.Black,
                     indicatorColor = Color.White,
                     unselectedIconColor = Color.White
                 ),
                 onClick = {
+
                     navController.navigate(opcion.path) {
                         popUpTo(navController.graph.findStartDestination().id)
                         launchSingleTop = true
+
                     }
+                    //opcionSeleccionada = index
+                   /* when (opcion.titulo) {
+                        "Tienda" -> navController.navigate(AppRoutes.tiendaScreen.path)
+                        "Categoria" -> navController.navigate(AppRoutes.categoriaScreen.path)
+                        "Cuenta" -> navController.navigate(AppRoutes.cuentaScreen.path)
+                        "Carrito" -> navController.navigate(AppRoutes.carritoScreen.path)
+                    }*/
                 },
                 icon = {
                     Icon(imageVector = opcion.icon, contentDescription = "")

@@ -4,18 +4,19 @@ import com.example.applenia_carbon.R
 
 
 val listaCategorias = listOf(
-    dataCategoria(R.drawable.pro1, "Promociones"),
-    dataCategoria(R.drawable.fc1, "Festival de cuartos"),
-    dataCategoria(R.drawable.pb1, "Pollo a la brasa"),
-    dataCategoria(R.drawable.cp1, "Carnes parrillas"),
-    dataCategoria(R.drawable.cl1, "Complementos"),
-    dataCategoria(R.drawable.ep1, "Entradas y piqueos"),
-    dataCategoria(R.drawable.pc1, "Postres"),
-    dataCategoria(R.drawable.bb1, "Bebidas"),
+    dataCategoria(1,R.drawable.pro1, "Promociones"),
+    dataCategoria(2,R.drawable.fc1, "Festival de cuartos"),
+    dataCategoria(3,R.drawable.pb1, "Pollo a la brasa"),
+    dataCategoria(4,R.drawable.cp1, "Carnes parrillas"),
+    dataCategoria(5,R.drawable.cl1, "Complementos"),
+    dataCategoria(6,R.drawable.ep1, "Entradas y piqueos"),
+    dataCategoria(7,R.drawable.pc1, "Postres"),
+    dataCategoria(8,R.drawable.bb1, "Bebidas"),
 )
 
 val listaProductos = listOf(
     Producto(
+        1,
         1,
         R.drawable.pro1,
         "Pollo + 1/4 pollo",
@@ -24,6 +25,7 @@ val listaProductos = listOf(
     ),
     Producto(
         2,
+        1,
         R.drawable.pro2,
         "Pollo + 1/4 pollo + 1/2 tequeños",
         "Un pollo a la brasa entero jugoso + 1/4 de pollo a la brasa + cocantes papas fritas",
@@ -31,6 +33,7 @@ val listaProductos = listOf(
     ),
     Producto(
         3,
+        1,
         R.drawable.pro3,
         "Pollo + 1/4 pollo",
         "Un pollo a la brasa entero jugoso + 1/4 de pollo a la brasa + cocantes papas fritas",
@@ -38,6 +41,7 @@ val listaProductos = listOf(
     ),
     Producto(
         4,
+        1,
         R.drawable.pro4,
         "Pollo + 1/4 pollo",
         "Un pollo a la brasa entero jugoso + 1/4 de pollo a la brasa + cocantes papas fritas",
@@ -46,6 +50,7 @@ val listaProductos = listOf(
 
     Producto(
         5,
+        2,
         R.drawable.fc1,
         "Pollo + 1/4 pollo",
         "1/4 de pollo jugoso + 1 sabroso palo de anticucho + crocantes papas fritas + ensalada fresca.",
@@ -53,6 +58,7 @@ val listaProductos = listOf(
     ),
     Producto(
         6,
+        2,
         R.drawable.pro2,
         "Pollo + 1/4 pollo",
         "Un pollo a la brasa entero jugoso + 1/4 de pollo a la brasa + cocantes papas fritas",
@@ -60,6 +66,7 @@ val listaProductos = listOf(
     ),
     Producto(
         7,
+        2,
         R.drawable.pro3,
         "Pollo + 1/4 pollo",
         "Un pollo a la brasa entero jugoso + 1/4 de pollo a la brasa + cocantes papas fritas",
@@ -67,6 +74,7 @@ val listaProductos = listOf(
     ),
     Producto(
         8,
+        2,
         R.drawable.pro4,
         "Pollo + 1/4 pollo",
         "Un pollo a la brasa entero jugoso + 1/4 de pollo a la brasa + cocantes papas fritas",
@@ -74,6 +82,7 @@ val listaProductos = listOf(
     ),
     Producto(
         9,
+        3,
         R.drawable.pb1,
         "1/2 Pollo + Bebida Natural 1.5 Lt",
         "1/2 pollo jugoso + crocantes papas fritas + ensalada fresca + bebida natural 1.5lt.",
@@ -81,6 +90,7 @@ val listaProductos = listOf(
     ),
     Producto(
         10,
+        3,
         R.drawable.pro2,
         "Pollo + 1/4 pollo",
         "Un pollo a la brasa entero jugoso + 1/4 de pollo a la brasa + cocantes papas fritas",
@@ -88,6 +98,7 @@ val listaProductos = listOf(
     ),
     Producto(
         11,
+        3,
         R.drawable.pro3,
         "Pollo + 1/4 pollo",
         "Un pollo a la brasa entero jugoso + 1/4 de pollo a la brasa + cocantes papas fritas",
@@ -95,6 +106,7 @@ val listaProductos = listOf(
     ),
     Producto(
         12,
+        3,
         R.drawable.pro4,
         "Pollo + 1/4 pollo",
         "Un pollo a la brasa entero jugoso + 1/4 de pollo a la brasa + cocantes papas fritas",
@@ -102,6 +114,7 @@ val listaProductos = listOf(
     ),
     Producto(
         13,
+        4,
         R.drawable.cp1,
         "Pollo + 1/4 pollo",
         "Un pollo a la brasa entero jugoso + 1/4 de pollo a la brasa + cocantes papas fritas",
@@ -109,6 +122,7 @@ val listaProductos = listOf(
     ),
     Producto(
         14,
+        4,
         R.drawable.pro2,
         "Pollo + 1/4 pollo",
         "Un pollo a la brasa entero jugoso + 1/4 de pollo a la brasa + cocantes papas fritas",
@@ -116,6 +130,7 @@ val listaProductos = listOf(
     ),
     Producto(
         15,
+        4,
         R.drawable.pro3,
         "Pollo + 1/4 pollo",
         "Un pollo a la brasa entero jugoso + 1/4 de pollo a la brasa + cocantes papas fritas",
@@ -123,6 +138,7 @@ val listaProductos = listOf(
     ),
     Producto(
         16,
+        4,
         R.drawable.pro1,
         "Pollo + 1/4 pollo",
         "Un pollo a la brasa entero jugoso + 1/4 de pollo a la brasa + cocantes papas fritas",
@@ -130,6 +146,7 @@ val listaProductos = listOf(
     ),
     Producto(
         17,
+        5,
         R.drawable.pro1,
         "Pollo + 1/4 pollo",
         "Un pollo a la brasa entero jugoso + 1/4 de pollo a la brasa + cocantes papas fritas",
@@ -137,6 +154,7 @@ val listaProductos = listOf(
     ),
     Producto(
         18,
+        5,
         R.drawable.pro2,
         "Pollo + 1/4 pollo",
         "Un pollo a la brasa entero jugoso + 1/4 de pollo a la brasa + cocantes papas fritas",
@@ -144,6 +162,7 @@ val listaProductos = listOf(
     ),
     Producto(
         19,
+        5,
         R.drawable.pro3,
         "Pollo + 1/4 pollo",
         "Un pollo a la brasa entero jugoso + 1/4 de pollo a la brasa + cocantes papas fritas",
@@ -151,6 +170,7 @@ val listaProductos = listOf(
     ),
     Producto(
         20,
+        5,
         R.drawable.pro4,
         "Pollo + 1/4 pollo",
         "Un pollo a la brasa entero jugoso + 1/4 de pollo a la brasa + cocantes papas fritas",
@@ -158,6 +178,7 @@ val listaProductos = listOf(
     ),
     Producto(
         21,
+        6,
         R.drawable.pro1,
         "Pollo + 1/4 pollo",
         "Un pollo a la brasa entero jugoso + 1/4 de pollo a la brasa + cocantes papas fritas",
@@ -165,6 +186,7 @@ val listaProductos = listOf(
     ),
     Producto(
         22,
+        6,
         R.drawable.pro2,
         "Pollo + 1/4 pollo",
         "Un pollo a la brasa entero jugoso + 1/4 de pollo a la brasa + cocantes papas fritas",
@@ -172,6 +194,7 @@ val listaProductos = listOf(
     ),
     Producto(
         23,
+        6,
         R.drawable.pro3,
         "Pollo + 1/4 pollo",
         "Un pollo a la brasa entero jugoso + 1/4 de pollo a la brasa + cocantes papas fritas",
@@ -179,6 +202,7 @@ val listaProductos = listOf(
     ),
     Producto(
         24,
+        6,
         R.drawable.pro4,
         "Pollo + 1/4 pollo",
         "Un pollo a la brasa entero jugoso + 1/4 de pollo a la brasa + cocantes papas fritas",
@@ -186,6 +210,7 @@ val listaProductos = listOf(
     ),
     Producto(
         25,
+        7,
         R.drawable.pro1,
         "Pollo + 1/4 pollo",
         "Un pollo a la brasa entero jugoso + 1/4 de pollo a la brasa + cocantes papas fritas",
@@ -193,6 +218,7 @@ val listaProductos = listOf(
     ),
     Producto(
         26,
+        7,
         R.drawable.pro2,
         "Pollo + 1/4 pollo",
         "Un pollo a la brasa entero jugoso + 1/4 de pollo a la brasa + cocantes papas fritas",
@@ -200,6 +226,7 @@ val listaProductos = listOf(
     ),
     Producto(
         27,
+        7,
         R.drawable.pro3,
         "Pollo + 1/4 pollo",
         "Un pollo a la brasa entero jugoso + 1/4 de pollo a la brasa + cocantes papas fritas",
@@ -207,6 +234,7 @@ val listaProductos = listOf(
     ),
     Producto(
         28,
+        7,
         R.drawable.pro4,
         "Pollo + 1/4 pollo",
         "Un pollo a la brasa entero jugoso + 1/4 de pollo a la brasa + cocantes papas fritas",
@@ -214,6 +242,7 @@ val listaProductos = listOf(
     ),
     Producto(
         29,
+        8,
         R.drawable.bb1,
         "IncaKola",
         "Bebida refrescante",
@@ -221,6 +250,7 @@ val listaProductos = listOf(
     ),
     Producto(
         30,
+        8,
         R.drawable.pro2,
         "Pollo + 1/4 pollo",
         "Un pollo a la brasa entero jugoso + 1/4 de pollo a la brasa + cocantes papas fritas",
@@ -228,6 +258,7 @@ val listaProductos = listOf(
     ),
     Producto(
         31,
+        8,
         R.drawable.pro3,
         "Pollo + 1/4 pollo",
         "Un pollo a la brasa entero jugoso + 1/4 de pollo a la brasa + cocantes papas fritas",
@@ -235,6 +266,7 @@ val listaProductos = listOf(
     ),
     Producto(
         32,
+        8,
         R.drawable.pro4,
         "Pollo + 1/4 pollo",
         "Un pollo a la brasa entero jugoso + 1/4 de pollo a la brasa + cocantes papas fritas",

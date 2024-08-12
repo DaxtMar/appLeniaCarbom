@@ -97,7 +97,7 @@ fun CartItemRow(
         Image(
             painter = rememberAsyncImagePainter(
                 ImageRequest.Builder(LocalContext.current)
-                    .data(data = cartItem.producto.image)
+                    .data(data = cartItem.producto.imagen)
                     .apply(block = fun ImageRequest.Builder.() {
                         crossfade(true)
                         placeholder(R.drawable.lenaycarbon)
@@ -115,7 +115,7 @@ fun CartItemRow(
             modifier = Modifier.weight(1f)
         ) {
             Text(
-                text = cartItem.producto.title,
+                text = cartItem.producto.nombre,
             )
             Spacer(modifier = Modifier.height(4.dp))
             Text(

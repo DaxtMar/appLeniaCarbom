@@ -1,23 +1,32 @@
 package com.example.applenia_carbon.screens
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.activity.viewModels
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -29,84 +38,142 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Surface
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.text.TextStyle
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
+import com.example.applenia_carbon.R
 import com.example.applenia_carbon.dataEjemplo.dataCategoria
 import com.example.applenia_carbon.dataEjemplo.listaCategorias
+import com.example.applenia_carbon.home.data.network.response.CategoriaResponse
+import com.example.applenia_carbon.home.viewmodel.CategoriaViewModel
+import com.example.applenia_carbon.home.viewmodel.HomeViewModel
+import com.example.applenia_carbon.routes.AppRoutes
 
 
 @Composable
-fun categoriaScreen() {
+fun categoriaScreen(navController: NavController, homeViewModel: HomeViewModel) {
 
     Column(
         modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Box(modifier = Modifier.padding(start = 10.dp, end = 10.dp)) {
-            buscar()
-            Spacer(Modifier.size(15.dp))
-        }
 
-        CategoriaGrid(listaCategorias)
+        CategoryScreen(navController = navController, homeViewModel = homeViewModel)
     }
 }
 
-
 @Composable
-fun CategoriaGrid(dataCategorias: List<dataCategoria>) {
+fun CategoryScreen(
+    modifier: Modifier = Modifier,
+    navController: NavController,
+    homeViewModel: HomeViewModel
+) {
+    //val viewModel: CategoriaViewModel = viewModel()
+    //val categorias by viewModel.categorias.observeAsState(emptyList())
+    val categorias by homeViewModel.categoriaResponse.observeAsState(emptyList())
+
+    LaunchedEffect(Unit) {
+        homeViewModel.listarCategorias()
+    }
+
     LazyVerticalGrid(
-        columns = GridCells.Fixed(2),
-        contentPadding = PaddingValues(8.dp),
-        verticalArrangement = Arrangement.spacedBy(8.dp),
-        horizontalArrangement = Arrangement.spacedBy(8.dp)
+        columns = GridCells.Adaptive(150.dp),
+        verticalArrangement = Arrangement.spacedBy(16.dp),
+        horizontalArrangement = Arrangement.spacedBy(16.dp),
+        contentPadding = PaddingValues(16.dp),
+        modifier = modifier
     ) {
+        items(categorias) { category ->
+            CategoryCard(category, navController = navController)
+        }
+        /*
+        items(listaCategorias) { category ->
+            CategoryCard(category, navController = navController)
+        }*/
+    }
+}
 
-        items(dataCategorias) { place ->
-            CategoriaItem(place)
+@Composable
+fun CategoryCard(
+    /*categoria: dataCategoria,*/
+    categoriaResponse: CategoriaResponse,
+    modifier: Modifier = Modifier,
+    navController: NavController
+) {
+    //val image: Painter = painterResource(id = categoria.imageResId)
+    Surface(
+        color = Color.Transparent,
+        shape = MaterialTheme.shapes.extraLarge,
+        shadowElevation = 6.dp,
+        modifier = modifier
+            .size(160.dp)
+            .clickable {
+                // navController.navigate(AppRoutes.tiendaScreen.createRoute(categoria.idc))
+            },
+    ) {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+        ) {
+            Image(
+                painter = painterResource(id = R.drawable.lenaycarbon),
+                contentDescription = categoriaResponse.nombre,
+                modifier = Modifier.fillMaxSize(),
+                contentScale = ContentScale.Crop
+            )
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(Color.Black.copy(alpha = 0.6f)) // ajustar opacidad
+            )
+            Text(
+                text = categoriaResponse.nombre,
+                style = TextStyle(color = Color.White, fontSize = 20.sp),
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier.align(Alignment.Center)
+            )
         }
     }
 }
 
-@Composable
-fun buscar() {
-    var text by remember { mutableStateOf("") }
-    OutlinedTextField(
-        value = text,
-        onValueChange = { text = it },
-        label = { Text("Search") },
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(16.dp),
-        leadingIcon = { Icon(imageVector = Icons.Default.Search, contentDescription = "buscar") },
 
-        )
-}
-
-@Composable
-fun CategoriaItem(dataCategoria: dataCategoria) {
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .clickable { /**/ },
-        verticalArrangement = Arrangement.Center,
-    ) {
-        Image(
-            painter = painterResource(id = dataCategoria.imageResId),
-            contentDescription = dataCategoria.name,
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(150.dp),
-            contentScale = ContentScale.Crop
-        )
-        Spacer(modifier = Modifier.height(8.dp))
-        Text(
-            text = dataCategoria.name,
-            fontSize = 18.sp,
-            fontWeight = FontWeight.Bold,
-            color = Color.Black
-        )
-    }
-}
+//@Composable
+//fun CategoriaGrid(dataCategorias: List<dataCategoria>) {
+//    LazyVerticalGrid(
+//        columns = GridCells.Fixed(2),
+//        contentPadding = PaddingValues(8.dp),
+//        verticalArrangement = Arrangement.spacedBy(8.dp),
+//        horizontalArrangement = Arrangement.spacedBy(8.dp)
+//    ) {
+//
+//        items(dataCategorias) { place ->
+//            CategoriaItem(place)
+//        }
+//    }
+//}
+//
+//@Composable
+//fun buscar() {
+//    var text by remember { mutableStateOf("") }
+//    OutlinedTextField(
+//        value = text,
+//        onValueChange = { text = it },
+//        label = { Text("Search") },
+//        modifier = Modifier
+//            .fillMaxWidth()
+//            .padding(16.dp),
+//        leadingIcon = { Icon(imageVector = Icons.Default.Search, contentDescription = "buscar") },
+//
+//        )
+//}

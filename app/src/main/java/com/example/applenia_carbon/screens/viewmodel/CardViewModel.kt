@@ -4,6 +4,7 @@ import androidx.compose.runtime.mutableStateListOf
 import androidx.lifecycle.ViewModel
 import com.example.applenia_carbon.dataEjemplo.CartItem
 import com.example.applenia_carbon.dataEjemplo.Producto
+import com.example.applenia_carbon.home.data.network.response.ProductoResponse
 
 class CartViewModel : ViewModel() {
     private val _cartItems = mutableStateListOf<CartItem>()
@@ -11,7 +12,7 @@ class CartViewModel : ViewModel() {
 
 
 
-    fun addProductToCart(product: Producto) {
+    fun addProductToCart(product: ProductoResponse) {
         val existingItem = _cartItems.find { it.producto.idp == product.idp }
         if (existingItem != null) {
             // Incrementa la cantidad si el producto ya está en el carrito
@@ -23,7 +24,7 @@ class CartViewModel : ViewModel() {
         }
     }
 
-    fun removeProductFromCart(product: Producto) {
+    fun removeProductFromCart(product: ProductoResponse) {
         val existingItem = _cartItems.find { it.producto.idp == product.idp }
         if (existingItem != null) {
             if (existingItem.cantidad > 1) {

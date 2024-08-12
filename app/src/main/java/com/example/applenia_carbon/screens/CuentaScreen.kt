@@ -16,9 +16,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import com.example.applenia_carbon.MainActivity
+import com.example.applenia_carbon.Models.Usuario
 
 @Composable
-fun cuentaScreen() {
+fun cuentaScreen(user: Usuario?) {
     var selectedTab by remember { mutableStateOf(0) }
 
     Column(modifier = Modifier.fillMaxSize()) {
@@ -40,22 +41,22 @@ fun cuentaScreen() {
         }
 
         when (selectedTab) {
-            0 -> CuentaTab()
+            0 -> CuentaTab(user)
             1 -> HistorialTab()
         }
     }
 }
 
 @Composable
-fun CuentaTab() {
+fun CuentaTab(user: Usuario?) {
     var showEditDialog by remember { mutableStateOf(false) }
     var selectedItem by remember { mutableStateOf("") }
     var userData by remember {
         mutableStateOf(
             mapOf(
-                "Nombre y Apellido" to "",
-                "Número de teléfono" to "",
-                "Direcciones" to "",
+                "Nombre y Apellido" to (user?.nombre ?: ""),
+                "Número de teléfono" to (user?.telefono ?: ""),
+                "Direcciones" to (user?.direccion ?: ""),
                 "Atención al cliente" to "Comunicate al 111 o escríbenos: lenaycarbon@gmail.com"
             )
         )
@@ -101,8 +102,8 @@ fun CuentaTab() {
         Button(
             modifier = Modifier.align(Alignment.CenterHorizontally),
             onClick = {
-                // Handle Logout
-                (context as? MainActivity)?.finish() // Cierra la aplicación
+                // Manejar cierre de sesión
+                (context as? MainActivity)?.finish() // Cierra la actividad actual
             }
         ) {
             Text("Cerrar sesión")
@@ -114,6 +115,7 @@ fun CuentaTab() {
             userData = userData.toMutableMap().apply {
                 this[selectedItem] = newValue
             }
+            // Actualiza el usuario con el nuevo valor si es necesario
             showEditDialog = false
         }, onDismiss = { showEditDialog = false })
     }

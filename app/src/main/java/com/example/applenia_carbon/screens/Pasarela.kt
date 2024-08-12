@@ -48,7 +48,7 @@ fun pasarelaScreen(
             ) {
 
                 Text(
-                    text = cartItem.producto.title,
+                    text = cartItem.producto.nombre,
                     fontSize = 20.sp,
                     modifier = Modifier.weight(1f)
                 )

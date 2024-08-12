@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.viewModels
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavType
@@ -13,13 +14,19 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.example.applenia_carbon.auth.AuthViewModel
 import com.example.applenia_carbon.auth.authScreen
+import com.example.applenia_carbon.home.viewmodel.HomeViewModel
 import com.example.applenia_carbon.screens.homeScreen
 import com.example.applenia_carbon.routes.AppRoutes
 import com.example.applenia_carbon.screens.RegistroScreen
 import com.example.applenia_carbon.screens.WelcomeScreen
 import com.example.applenia_carbon.ui.theme.Applenia_carbonTheme
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+
+    private val homeViewModel: HomeViewModel by viewModels()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -40,7 +47,7 @@ class MainActivity : ComponentActivity() {
                             arguments = listOf(navArgument("id")
                             { type = NavType.IntType })
                         ) { params ->
-                            homeScreen(params.arguments?.getInt("id") ?: 0)
+                            homeScreen(params.arguments?.getInt("id") ?: 0,homeViewModel)
                         }
                         composable(AppRoutes.registroScreen.path) {
                             RegistroScreen(navigation)
