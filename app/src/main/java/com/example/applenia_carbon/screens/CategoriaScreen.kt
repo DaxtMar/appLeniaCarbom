@@ -17,6 +17,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
@@ -48,9 +49,12 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import coil.compose.rememberAsyncImagePainter
+import coil.request.ImageRequest
 import com.example.applenia_carbon.R
 import com.example.applenia_carbon.dataEjemplo.dataCategoria
 import com.example.applenia_carbon.dataEjemplo.listaCategorias
@@ -126,9 +130,21 @@ fun CategoryCard(
             modifier = Modifier
                 .fillMaxSize()
         ) {
+//            Image(
+//                painter = painterResource(id = R.drawable.lenaycarbon),
+//                contentDescription = categoriaResponse.nombre,
+//                modifier = Modifier.fillMaxSize(),
+//                contentScale = ContentScale.Crop
+//            )
             Image(
-                painter = painterResource(id = R.drawable.lenaycarbon),
-                contentDescription = categoriaResponse.nombre,
+                painter = rememberAsyncImagePainter(
+                    ImageRequest.Builder(LocalContext.current)
+                        .data(data = categoriaResponse.imagen)
+                        .apply(block = fun ImageRequest.Builder.() {
+                            crossfade(true)
+                            placeholder(R.drawable.lenaycarbon)
+                        }).build()
+                ), contentDescription = null,
                 modifier = Modifier.fillMaxSize(),
                 contentScale = ContentScale.Crop
             )

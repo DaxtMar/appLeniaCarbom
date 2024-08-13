@@ -105,7 +105,7 @@ fun CartItemRow(
             ),
             contentDescription = null,
             modifier = Modifier
-                .size(60.dp)
+                .size(100.dp)
                 .clip(RoundedCornerShape(10.dp))
         )
 

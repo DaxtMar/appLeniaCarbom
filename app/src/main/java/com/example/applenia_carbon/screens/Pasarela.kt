@@ -27,6 +27,7 @@ fun pasarelaScreen(
 ) {
     val cartItems = cartViewModel.cartItems
     val total = cartItems.sumOf { it.producto.precio * it.cantidad }
+    val totalFormateado = String.format("%.2f", total)
 
     Column(
         modifier = Modifier
@@ -70,7 +71,7 @@ fun pasarelaScreen(
         Spacer(modifier = Modifier.height(32.dp))
 
         Text(
-            text = "Total: $$total",
+            text = "Total: S/$totalFormateado",
             fontSize = 24.sp,
             fontWeight = FontWeight.Bold,
             modifier = Modifier.align(Alignment.End)
@@ -78,7 +79,7 @@ fun pasarelaScreen(
         Spacer(modifier = Modifier.height(16.dp))
         Button(
             onClick = {
-                /*metodo pagar*/
+                /* pagar*/
             },
             modifier
             = Modifier.fillMaxWidth()

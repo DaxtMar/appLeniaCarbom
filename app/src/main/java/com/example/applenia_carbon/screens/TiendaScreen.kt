@@ -39,6 +39,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight.Companion.Bold
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
@@ -73,7 +74,7 @@ fun ColumnItem(
 ) {
     Card(
         modifier
-            .padding(10.dp)
+            .padding(8.dp)
             .wrapContentSize()
             .clickable {
                 navController.navigate(AppRoutes.detalleScreen.paramDetalle(productoResponse.idp - 1))
@@ -87,18 +88,8 @@ fun ColumnItem(
         Row(
             modifier.fillMaxWidth(),
             verticalAlignment = Alignment.Top,
-            horizontalArrangement = Arrangement.spacedBy(15.dp)
+            horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            /*Image(
-                //painter = painterResource(id = productoResponse.image),
-                painter = painterResource(id = R.drawable.lenaycarbon),
-                contentDescription = productoResponse.nombre,
-                modifier = Modifier
-                    .height(200.dp)
-                    .width(150.dp),
-                contentScale = ContentScale.Crop
-            )*/
-
             Image(
                 painter = rememberAsyncImagePainter(
                     ImageRequest.Builder(LocalContext.current)
@@ -109,13 +100,21 @@ fun ColumnItem(
                         }).build()
                 ), contentDescription = null,
                 modifier = Modifier
-                    .height(200.dp)
-                    .width(150.dp),
+                    .height(140.dp)
+                    .width(120.dp),
                 contentScale = ContentScale.Crop
             )
-            Column(modifier.padding(12.dp)) {
-                Text(text = productoResponse.nombre, fontSize = 18.sp, fontWeight = Bold)
-                Text(text = productoResponse.descripcion, fontSize = 15.sp)
+            Column(modifier.padding(6.dp)) {
+                Text(
+                    text = productoResponse.nombre,
+                    fontSize = 18.sp,
+                    fontWeight = Bold,
+                    maxLines = 1
+                )
+                Text(
+                    text = productoResponse.descripcion, fontSize = 15.sp, maxLines = 2,
+                    overflow = TextOverflow.Ellipsis
+                )
                 Text(text = productoResponse.precio.toString(), fontSize = 16.sp, fontWeight = Bold)
                 //Text(text = producto.idp.toString(), fontSize = 12.sp)
             }
@@ -136,8 +135,8 @@ fun LazyColumnExample(
         val indexToScroll = index ?: 0
 
         LaunchedEffect(indexToScroll) {
-            // Encuentra el índice de la categoría en productos
-            val offset = indexToScroll * listaProductos.size // Ajusta según la lógica de tu lista
+
+            val offset = indexToScroll * listaProductos.size
             listState.scrollToItem(index = offset)
         }
         LazyColumn(
@@ -198,60 +197,7 @@ fun LazyColumnExample(
                             }
                         }
                     }
-//                    items(listaProductos.filter { it.idc == category.idc }) { producto ->
-//                        Row(
-//                            verticalAlignment = Alignment.CenterVertically,
-//                            modifier = Modifier
-//                                .fillMaxSize()
-//                        ) {
-//                            Column(
-//                                modifier = Modifier.padding(6.dp)
-//                            ) {
-//                                ColumnItem(
-//                                    modifier,
-//                                    producto,
-//                                    navController
-//                                )
-//                            }
-//                        }
-//                    }
                 }
-
-
-//                val agrupa = listaProductos.groupBy { (it.idp - 1) / 4 + 1 }
-//                agrupa.entries.forEach { entry ->
-//                    stickyHeader {
-//                        Row(
-//                            modifier = Modifier
-//                                .fillMaxWidth()
-//                                .background(Color.Red)
-//                                .padding(6.dp)
-//                        ) {
-//                            Text(
-//                                text = "${listaCategorias[entry.key - 1].name}",
-//                                fontWeight = Bold,
-//                                color = Color.White
-//                            )
-//                        }
-//                    }
-//                    items(entry.value) { item ->
-//                        Row(
-//                            verticalAlignment = Alignment.CenterVertically,
-//                            modifier = Modifier
-//                                .fillMaxSize()
-//                        ) {
-//                            Column(
-//                                modifier = Modifier.padding(6.dp)
-//                            ) {
-//                                ColumnItem(
-//                                    modifier,
-//                                    item,
-//                                    navController
-//                                )
-//                            }
-//                        }
-//                    }
-//                }
             }
         )
     }
