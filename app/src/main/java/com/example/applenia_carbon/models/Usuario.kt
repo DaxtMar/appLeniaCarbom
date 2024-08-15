@@ -1,5 +1,6 @@
 package com.example.applenia_carbon.Models
 
+
 data class Usuario(
     val id: Int?,
     val nombre: String,

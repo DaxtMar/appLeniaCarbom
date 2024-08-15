@@ -7,6 +7,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -26,6 +27,7 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
+    private val authViewModel: AuthViewModel by viewModels()
     private val homeViewModel: HomeViewModel by viewModels()
     private val pedidoViewModel: PedidoViewModel by viewModels()
 
@@ -35,6 +37,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             Applenia_carbonTheme {
                 val navigation = rememberNavController()
+                //val authViewModel: AuthViewModel = viewModel() // Obtener AuthViewModel
                 NavHost(navController = navigation,
                     startDestination = AppRoutes.welcomeScreen.path,
                     builder = {
@@ -42,14 +45,14 @@ class MainActivity : ComponentActivity() {
                             WelcomeScreen(navigation)
                         }
                         composable(AppRoutes.loginScreen.path) {
-                            authScreen(AuthViewModel(), navigation)
+                            authScreen(/*AuthViewModel()*/authViewModel, navigation)
                         }
                         composable(
                             AppRoutes.homeScreen.path,
                             arguments = listOf(navArgument("id")
                             { type = NavType.IntType })
                         ) { params ->
-                            homeScreen(params.arguments?.getInt("id") ?: 0,homeViewModel,pedidoViewModel)
+                            homeScreen(/*params.arguments?.getInt("id") ?: 0,*/authViewModel,homeViewModel,pedidoViewModel)
                         }
                         composable(AppRoutes.registroScreen.path) {
                             RegistroScreen(navigation)
@@ -61,8 +64,6 @@ class MainActivity : ComponentActivity() {
         }
     }
 }
-
-
 
 @Preview(showBackground = true)
 @Composable

@@ -4,7 +4,7 @@ import com.example.applenia_carbon.home.data.network.response.ProductoResponse
 
 data class dataCategoria(val idc:Int,val imageResId: Int, val name: String)
 
-const val ipserver:String="http://192.168.137.151:8080/"
+const val ipserver:String="http://192.168.1.51:8080/"
 
 data class Producto(
     val idp:Int,

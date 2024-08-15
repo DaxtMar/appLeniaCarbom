@@ -1,5 +1,7 @@
 package com.example.applenia_carbon.core.retrofit
 
+import com.example.applenia_carbon.auth.data.network.request.LoginRequest
+import com.example.applenia_carbon.auth.data.network.response.LoginResponse
 import com.example.applenia_carbon.home.data.network.request.PedidoRequest
 import com.example.applenia_carbon.home.data.network.response.CategoriaResponse
 import com.example.applenia_carbon.home.data.network.response.PedidoResponse
@@ -10,6 +12,10 @@ import retrofit2.http.GET
 import retrofit2.http.POST
 
 interface LeniaCarbonClient {
+
+    @POST("auth/login")
+    suspend fun login(@Body loginRequest: LoginRequest): Response<LoginResponse>
+
 
     @GET("productos")
     suspend fun listarProductos(): Response<List<ProductoResponse>>

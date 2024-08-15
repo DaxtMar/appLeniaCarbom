@@ -9,8 +9,8 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.example.applenia_carbon.Models.Usuario
-import com.example.applenia_carbon.Retrofit.RetrofitClient
+//import com.example.applenia_carbon.Models.Usuario
+//import com.example.applenia_carbon.Retrofit.RetrofitClient
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -79,6 +79,7 @@ fun RegistroScreen(navController: NavController) {
         Spacer(modifier = Modifier.height(16.dp))
         Button(
             onClick = {
+                /*
                 val nuevoUsuario = Usuario(
                     id = null, // El ID lo genera el servidor
                     nombre = nombre,
@@ -86,9 +87,9 @@ fun RegistroScreen(navController: NavController) {
                     password = password,
                     direccion = direccion,
                     telefono = telefono
-                )
-                val call = RetrofitClient.apiServiceUsuario.createUsuario(nuevoUsuario)
-                call.enqueue(object : Callback<Usuario> {
+                )*/
+                //val call = RetrofitClient.apiServiceUsuario.createUsuario(nuevoUsuario)
+                /*call.enqueue(object : Callback<Usuario> {
                     override fun onResponse(call: Call<Usuario>, response: Response<Usuario>) {
                         if (response.isSuccessful) {
                             navController.navigate("loginScreen") // Cambia según tu ruta
@@ -102,7 +103,7 @@ fun RegistroScreen(navController: NavController) {
                         // Manejo de errores
                         errorMessage = t.message ?: "Error de conexión"
                     }
-                })
+                })*/
             },
             modifier = Modifier.fillMaxWidth()
         ) {

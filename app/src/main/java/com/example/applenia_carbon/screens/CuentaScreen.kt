@@ -1,5 +1,6 @@
 package com.example.applenia_carbon.screens
 
+
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -17,14 +18,20 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import com.example.applenia_carbon.MainActivity
-import com.example.applenia_carbon.Models.Usuario
+import com.example.applenia_carbon.auth.data.network.response.LoginResponse
+import com.example.applenia_carbon.auth.AuthViewModel
 import com.example.applenia_carbon.home.data.network.response.PedidoResponse
 import com.example.applenia_carbon.home.viewmodel.HomeViewModel
 
 @Composable
-fun cuentaScreen(user: Usuario?, homeViewModel: HomeViewModel) {
+fun cuentaScreen(authViewModel: AuthViewModel, homeViewModel: HomeViewModel) {
     var selectedTab by remember { mutableStateOf(0) }
 
+    // Obtener los datos del usuario desde el ViewModel
+    val usuario by authViewModel.loginResponse.observeAsState<LoginResponse>()
+    /*val telefono by authViewModel.telefono.observeAsState("")
+    val direccion by authViewModel.direccion.observeAsState("")*/
+    val name = usuario?.nombre
     Column(modifier = Modifier.fillMaxSize()) {
         TabRow(
             selectedTabIndex = selectedTab,
@@ -44,22 +51,22 @@ fun cuentaScreen(user: Usuario?, homeViewModel: HomeViewModel) {
         }
 
         when (selectedTab) {
-            0 -> CuentaTab(user)
+            0 -> CuentaTab(usuario)
             1 -> HistorialTab(homeViewModel)
         }
     }
 }
 
 @Composable
-fun CuentaTab(user: Usuario?) {
+fun CuentaTab(usuario: LoginResponse?) {
     var showEditDialog by remember { mutableStateOf(false) }
     var selectedItem by remember { mutableStateOf("") }
     var userData by remember {
         mutableStateOf(
             mapOf(
-                "Nombre y Apellido" to (user?.nombre ?: ""),
-                "Número de teléfono" to (user?.telefono ?: ""),
-                "Direcciones" to (user?.direccion ?: ""),
+                "Nombre" to usuario?.nombre,
+                "Número de teléfono" to usuario?.telefono,
+                "Dirección" to usuario?.direccion,
                 "Atención al cliente" to "Comunicate al 111 o escríbenos: lenaycarbon@gmail.com"
             )
         )
@@ -99,7 +106,9 @@ fun CuentaTab(user: Usuario?) {
                 Spacer(modifier = Modifier.width(16.dp))
                 Column {
                     Text(key, fontSize = 16.sp, fontWeight = FontWeight.Bold)
-                    Text(value, fontSize = 14.sp)
+                    if (value != null) {
+                        Text(value, fontSize = 14.sp)
+                    }
                 }
             }
         }

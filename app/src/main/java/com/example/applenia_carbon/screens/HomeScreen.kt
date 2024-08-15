@@ -34,41 +34,28 @@ import androidx.navigation.NavDestination
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
-
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import com.example.applenia_carbon.Models.Usuario
+import com.example.applenia_carbon.auth.AuthViewModel
 import com.example.applenia_carbon.core.utils.MenuItem
 import com.example.applenia_carbon.home.viewmodel.HomeViewModel
 import com.example.applenia_carbon.home.viewmodel.PedidoViewModel
 import com.example.applenia_carbon.routes.AppRoutes
-import com.example.applenia_carbon.routes.opcionesApp
 import com.example.applenia_carbon.screens.viewmodel.CartViewModel
-import kotlinx.coroutines.launch
 
 @Composable
-fun homeScreen(id: Int,homeViewModel: HomeViewModel,pedidoViewModel: PedidoViewModel) {
+fun homeScreen(/*id: Int, */authViewModel: AuthViewModel,
+               homeViewModel: HomeViewModel,
+               pedidoViewModel: PedidoViewModel
+) {
     val navController = rememberNavController()
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentDestination = navBackStackEntry?.destination
     val cartViewModel: CartViewModel = viewModel()
-
-    // Estado para almacenar el usuario
-    val user = remember { mutableStateOf<Usuario?>(null) }
-    val coroutineScope = rememberCoroutineScope()
-
-    // Cargar los datos del usuario
-    LaunchedEffect(id) {
-        coroutineScope.launch {
-            // Aquí deberías implementar la lógica para recuperar el usuario basado en el id
-            // Simulación de la recuperación del usuario
-            user.value = Usuario(id, "Nombre", "email@example.com", "password", "Dirección", "Teléfono")
-        }
-    }
 
     Scaffold(
         topBar = { MyToolBar() },
@@ -92,13 +79,13 @@ fun homeScreen(id: Int,homeViewModel: HomeViewModel,pedidoViewModel: PedidoViewM
                     composable(route = AppRoutes.tiendaScreen.path) { backStackEntry ->
                         val categoriaIndex =
                             backStackEntry.arguments?.getString("categoriaIndex")?.toIntOrNull()
-                        tiendaScreen(navController, categoriaIndex,homeViewModel)
+                        tiendaScreen(navController, categoriaIndex, homeViewModel)
                     }
                     composable(route = AppRoutes.categoriaScreen.path) {
-                        categoriaScreen(navController,homeViewModel)
+                        categoriaScreen(navController, homeViewModel)
                     }
                     composable(route = AppRoutes.cuentaScreen.path) {
-                        cuentaScreen(user = user.value,homeViewModel)
+                        cuentaScreen(authViewModel, homeViewModel)
                     }
                     composable(route = AppRoutes.carritoScreen.path) {
                         carritoScreen(cartViewModel = cartViewModel, navController)
@@ -112,12 +99,12 @@ fun homeScreen(id: Int,homeViewModel: HomeViewModel,pedidoViewModel: PedidoViewM
                         DetalleScreen(
                             id = params.arguments?.getInt("idp") ?: 0,
                             navController = navController, cartViewModel = cartViewModel,
-                            homeViewModel=homeViewModel
+                            homeViewModel = homeViewModel
                         )
                     }
 
                     composable(route = AppRoutes.pasarelaScreen.path) {
-                        pasarelaScreen(cartViewModel = cartViewModel,pedidoViewModel)
+                        pasarelaScreen(cartViewModel = cartViewModel, pedidoViewModel)
                     }
                 }
             }
@@ -172,12 +159,12 @@ fun EjemploBottomBar(
 
                     }
                     //opcionSeleccionada = index
-                   /* when (opcion.titulo) {
-                        "Tienda" -> navController.navigate(AppRoutes.tiendaScreen.path)
-                        "Categoria" -> navController.navigate(AppRoutes.categoriaScreen.path)
-                        "Cuenta" -> navController.navigate(AppRoutes.cuentaScreen.path)
-                        "Carrito" -> navController.navigate(AppRoutes.carritoScreen.path)
-                    }*/
+                    /* when (opcion.titulo) {
+                         "Tienda" -> navController.navigate(AppRoutes.tiendaScreen.path)
+                         "Categoria" -> navController.navigate(AppRoutes.categoriaScreen.path)
+                         "Cuenta" -> navController.navigate(AppRoutes.cuentaScreen.path)
+                         "Carrito" -> navController.navigate(AppRoutes.carritoScreen.path)
+                     }*/
                 },
                 icon = {
                     Icon(imageVector = opcion.icon, contentDescription = "")

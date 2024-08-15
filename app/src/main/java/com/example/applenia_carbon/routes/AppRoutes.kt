@@ -3,6 +3,9 @@ package com.example.applenia_carbon.routes
 sealed class AppRoutes(val path: String, val nombre: String = "") {
     object welcomeScreen : AppRoutes("welcomeScreen")
     object loginScreen : AppRoutes("loginScreen")
+
+    //object homeScreen : AppRoutes("homeScreen")
+
     object homeScreen : AppRoutes("homeScreen/{id}") {
         fun paramHome(id: Int) = "homeScreen/${id}"
     }
@@ -18,20 +21,11 @@ sealed class AppRoutes(val path: String, val nombre: String = "") {
 
     object categoriaScreen : AppRoutes("categoriaScreen", "Categoria")
     object cuentaScreen : AppRoutes("cuentaScreen", "Cuenta")
-    
+
     object detalleScreen : AppRoutes("detalleScreen/{idp}") {
         fun paramDetalle(idp: Int) = "detalleScreen/${idp}"
     }
 
     object carritoScreen : AppRoutes("carritoScreen", "Carrito")
     object pasarelaScreen : AppRoutes("pasarelaScreen")
-}
-
-fun opcionesApp(): List<AppRoutes> {
-    return listOf(
-        AppRoutes.tiendaScreen,
-        AppRoutes.categoriaScreen,
-        AppRoutes.cuentaScreen,
-        AppRoutes.carritoScreen
-    )
 }

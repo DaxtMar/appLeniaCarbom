@@ -1,21 +1,53 @@
-
-
 package com.example.applenia_carbon.auth
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.applenia_carbon.Models.LoginRequest
-import com.example.applenia_carbon.Models.LoginResponse
-import com.example.applenia_carbon.Retrofit.RetrofitClient
-import com.google.gson.Gson
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+import androidx.lifecycle.viewModelScope
+import com.example.applenia_carbon.auth.data.network.request.LoginRequest
+import com.example.applenia_carbon.auth.data.network.response.LoginResponse
+//import com.example.applenia_carbon.Retrofit.RetrofitClient
+import com.example.applenia_carbon.auth.domain.LoginUseCase
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.launch
+import javax.inject.Inject
 
+@HiltViewModel
+class AuthViewModel @Inject constructor(
+    private val loginUseCase: LoginUseCase
+) : ViewModel() {
+
+    private val _nombre = MutableLiveData<String>()
+    val nombre: LiveData<String> = _nombre
+    private val _password = MutableLiveData<String>()
+    val password: LiveData<String> = _password
+
+    private val _loginResponse = MutableLiveData<LoginResponse>()
+    val loginResponse: LiveData<LoginResponse> = _loginResponse
+
+    fun onLoginValueChanged(usuario: String, password: String) {
+        _nombre.value = usuario
+        _password.value = password
+        //_botonLoginHabilitado.value = habilitarBoton(usuario, password)
+    }
+
+    fun login() {
+        viewModelScope.launch {
+            val response = loginUseCase(LoginRequest(nombre.value!!, password.value!!))
+            _loginResponse.value = response
+        }
+    }
+}
+/*
 class AuthViewModel : ViewModel() {
     private val _nombre = MutableLiveData<String>()
     val nombre: LiveData<String> get() = _nombre
+
+    private val _telefono = MutableLiveData<String>()
+    val telefono: LiveData<String> get() = _telefono
+
+    private val _direccion = MutableLiveData<String>()
+    val direccion: LiveData<String> get() = _direccion
 
     private val _password = MutableLiveData<String>()
     val password: LiveData<String> get() = _password
@@ -40,35 +72,43 @@ class AuthViewModel : ViewModel() {
             password = _password.value.orEmpty()
         )
 
-        RetrofitClient.apiServiceUsuario.login(loginRequest).enqueue(object : Callback<LoginResponse> {
-            override fun onResponse(call: Call<LoginResponse>, response: Response<LoginResponse>) {
-                if (response.isSuccessful) {
-                    val loginResponse = response.body()
-                    if (loginResponse?.success == true) {
-                        _loginSuccess.value = true
-                        _id.value = loginResponse.id ?: 0 // Asume 0 si id es null
-                        _errorMessage.value = "" // Limpiar el mensaje de error en caso de éxito
+        RetrofitClient.apiServiceUsuario.login(loginRequest)
+            .enqueue(object : Callback<LoginResponse> {
+                override fun onResponse(
+                    call: Call<LoginResponse>,
+                    response: Response<LoginResponse>
+                ) {
+                    if (response.isSuccessful) {
+                        val loginResponse = response.body()
+                        if (loginResponse?.success == true) {
+                            _loginSuccess.value = true
+                            _id.value = loginResponse.id ?: 0
+                            _nombre.value = loginResponse.nombre.orEmpty()
+                            _telefono.value = loginResponse.telefono.orEmpty()
+                            _direccion.value = loginResponse.direccion.orEmpty()
+                            _errorMessage.value = ""
+                        } else {
+                            _loginSuccess.value = false
+                            _errorMessage.value =
+                                loginResponse?.message ?: "Usuario o contraseña incorrectos"
+                        }
                     } else {
+                        val errorResponse = response.errorBody()?.string()
+                        val loginResponse = parseErrorResponse(errorResponse)
                         _loginSuccess.value = false
-                        _errorMessage.value = loginResponse?.message ?: "Usuario o contraseña incorrectos"
+                        _errorMessage.value =
+                            loginResponse?.message ?: "Usuario o contraseña incorrectos"
                     }
-                } else {
-                    // Esto manejará el caso de códigos HTTP como 401
-                    val errorResponse = response.errorBody()?.string()
-                    val loginResponse = parseErrorResponse(errorResponse)
-                    _loginSuccess.value = false
-                    _errorMessage.value = loginResponse?.message ?: "Usuario o contraseña incorrectos"
                 }
-            }
 
-            override fun onFailure(call: Call<LoginResponse>, t: Throwable) {
-                _loginSuccess.value = false
-                _errorMessage.value = "Error de conexión: ${t.message ?: "Por favor, verifica tu conexión a Internet"}"
-            }
-        })
+                override fun onFailure(call: Call<LoginResponse>, t: Throwable) {
+                    _loginSuccess.value = false
+                    _errorMessage.value =
+                        "Error de conexión: ${t.message ?: "Por favor, verifica tu conexión a Internet"}"
+                }
+            })
     }
 
-    // Método para analizar la respuesta de error en JSON
     private fun parseErrorResponse(errorBody: String?): LoginResponse? {
         return try {
             errorBody?.let {
@@ -80,29 +120,4 @@ class AuthViewModel : ViewModel() {
         }
     }
 }
-
-
-//package com.example.applenia_carbon.auth
-//
-//import androidx.lifecycle.LiveData
-//import androidx.lifecycle.MutableLiveData
-//
-//class AuthViewModel {
-//    private val _usuario = MutableLiveData<String>()
-//    val usuario: LiveData<String> = _usuario
-//
-//    private val _password = MutableLiveData<String>()
-//    val password: LiveData<String> = _password
-//
-//    fun onLoginValueChanged(usuario: String, password: String) {
-//        _usuario.value = usuario
-//        _password.value = password
-//    }
-//
-//    fun login(): Boolean {
-//        if (usuario.value == "juan" && password.value == "123")
-//            return true
-//        else
-//            return false
-//    }
-//}
+*/
