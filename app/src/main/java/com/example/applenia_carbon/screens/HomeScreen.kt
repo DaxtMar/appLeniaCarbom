@@ -44,13 +44,14 @@ import androidx.navigation.navArgument
 import com.example.applenia_carbon.Models.Usuario
 import com.example.applenia_carbon.core.utils.MenuItem
 import com.example.applenia_carbon.home.viewmodel.HomeViewModel
+import com.example.applenia_carbon.home.viewmodel.PedidoViewModel
 import com.example.applenia_carbon.routes.AppRoutes
 import com.example.applenia_carbon.routes.opcionesApp
 import com.example.applenia_carbon.screens.viewmodel.CartViewModel
 import kotlinx.coroutines.launch
 
 @Composable
-fun homeScreen(id: Int,homeViewModel: HomeViewModel) {
+fun homeScreen(id: Int,homeViewModel: HomeViewModel,pedidoViewModel: PedidoViewModel) {
     val navController = rememberNavController()
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentDestination = navBackStackEntry?.destination
@@ -97,7 +98,7 @@ fun homeScreen(id: Int,homeViewModel: HomeViewModel) {
                         categoriaScreen(navController,homeViewModel)
                     }
                     composable(route = AppRoutes.cuentaScreen.path) {
-                        cuentaScreen(user = user.value)
+                        cuentaScreen(user = user.value,homeViewModel)
                     }
                     composable(route = AppRoutes.carritoScreen.path) {
                         carritoScreen(cartViewModel = cartViewModel, navController)
@@ -116,7 +117,7 @@ fun homeScreen(id: Int,homeViewModel: HomeViewModel) {
                     }
 
                     composable(route = AppRoutes.pasarelaScreen.path) {
-                        pasarelaScreen(cartViewModel = cartViewModel)
+                        pasarelaScreen(cartViewModel = cartViewModel,pedidoViewModel)
                     }
                 }
             }

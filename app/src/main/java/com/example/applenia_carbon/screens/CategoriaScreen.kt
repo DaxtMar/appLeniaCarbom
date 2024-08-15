@@ -59,7 +59,7 @@ import com.example.applenia_carbon.R
 import com.example.applenia_carbon.dataEjemplo.dataCategoria
 import com.example.applenia_carbon.dataEjemplo.listaCategorias
 import com.example.applenia_carbon.home.data.network.response.CategoriaResponse
-import com.example.applenia_carbon.home.viewmodel.CategoriaViewModel
+//import com.example.applenia_carbon.home.viewmodel.CategoriaViewModel
 import com.example.applenia_carbon.home.viewmodel.HomeViewModel
 import com.example.applenia_carbon.routes.AppRoutes
 
@@ -130,12 +130,6 @@ fun CategoryCard(
             modifier = Modifier
                 .fillMaxSize()
         ) {
-//            Image(
-//                painter = painterResource(id = R.drawable.lenaycarbon),
-//                contentDescription = categoriaResponse.nombre,
-//                modifier = Modifier.fillMaxSize(),
-//                contentScale = ContentScale.Crop
-//            )
             Image(
                 painter = rememberAsyncImagePainter(
                     ImageRequest.Builder(LocalContext.current)
@@ -162,34 +156,3 @@ fun CategoryCard(
         }
     }
 }
-
-
-//@Composable
-//fun CategoriaGrid(dataCategorias: List<dataCategoria>) {
-//    LazyVerticalGrid(
-//        columns = GridCells.Fixed(2),
-//        contentPadding = PaddingValues(8.dp),
-//        verticalArrangement = Arrangement.spacedBy(8.dp),
-//        horizontalArrangement = Arrangement.spacedBy(8.dp)
-//    ) {
-//
-//        items(dataCategorias) { place ->
-//            CategoriaItem(place)
-//        }
-//    }
-//}
-//
-//@Composable
-//fun buscar() {
-//    var text by remember { mutableStateOf("") }
-//    OutlinedTextField(
-//        value = text,
-//        onValueChange = { text = it },
-//        label = { Text("Search") },
-//        modifier = Modifier
-//            .fillMaxWidth()
-//            .padding(16.dp),
-//        leadingIcon = { Icon(imageVector = Icons.Default.Search, contentDescription = "buscar") },
-//
-//        )
-//}

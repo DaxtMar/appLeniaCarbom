@@ -1,7 +1,9 @@
 package com.example.applenia_carbon.home.data.network.service
 
 import com.example.applenia_carbon.core.retrofit.LeniaCarbonClient
+import com.example.applenia_carbon.home.data.network.request.PedidoRequest
 import com.example.applenia_carbon.home.data.network.response.CategoriaResponse
+import com.example.applenia_carbon.home.data.network.response.PedidoResponse
 import com.example.applenia_carbon.home.data.network.response.ProductoResponse
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -24,5 +26,14 @@ class LeniaCarbonService @Inject constructor(
             response.body()!!
         }
     }
+
+    suspend fun listarPedido(): List<PedidoResponse> {
+        return withContext(Dispatchers.IO) {
+            val response = leniaCarbonClient.listarPedidos()
+            response.body()!!
+        }
+    }
+
+
 }
 

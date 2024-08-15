@@ -12,14 +12,17 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import com.example.applenia_carbon.MainActivity
 import com.example.applenia_carbon.Models.Usuario
+import com.example.applenia_carbon.home.data.network.response.PedidoResponse
+import com.example.applenia_carbon.home.viewmodel.HomeViewModel
 
 @Composable
-fun cuentaScreen(user: Usuario?) {
+fun cuentaScreen(user: Usuario?, homeViewModel: HomeViewModel) {
     var selectedTab by remember { mutableStateOf(0) }
 
     Column(modifier = Modifier.fillMaxSize()) {
@@ -42,7 +45,7 @@ fun cuentaScreen(user: Usuario?) {
 
         when (selectedTab) {
             0 -> CuentaTab(user)
-            1 -> HistorialTab()
+            1 -> HistorialTab(homeViewModel)
         }
     }
 }
@@ -64,9 +67,11 @@ fun CuentaTab(user: Usuario?) {
 
     val context = LocalContext.current
 
-    Column(modifier = Modifier
-        .fillMaxSize()
-        .padding(16.dp)) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp)
+    ) {
         userData.forEach { (key, value) ->
             Row(
                 modifier = Modifier
@@ -122,7 +127,12 @@ fun CuentaTab(user: Usuario?) {
 }
 
 @Composable
-fun EditDialog(item: String, currentValue: String, onSave: (String) -> Unit, onDismiss: () -> Unit) {
+fun EditDialog(
+    item: String,
+    currentValue: String,
+    onSave: (String) -> Unit,
+    onDismiss: () -> Unit
+) {
     var text by remember { mutableStateOf(currentValue) }
 
     AlertDialog(
@@ -157,24 +167,101 @@ fun EditDialog(item: String, currentValue: String, onSave: (String) -> Unit, onD
 }
 
 @Composable
-fun HistorialTab() {
-    val pedidos = listOf("Pedido 1", "Pedido 2", "Pedido 3") // Reemplaza con datos reales
+fun HistorialTab(homeViewModel: HomeViewModel) {
 
-    Column(modifier = Modifier
-        .fillMaxSize()
-        .padding(16.dp)) {
+    val isDialogVisible = remember { mutableStateOf(false) }
+    val pedidos by homeViewModel.pedidoResponse.observeAsState(emptyList())
+    LaunchedEffect(Unit) {
+        homeViewModel.listarPedidos()
+    }
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(10.dp)
+    ) {
         Text("Historial de Pedidos", fontSize = 24.sp, modifier = Modifier.padding(bottom = 16.dp))
-        LazyColumn {
-            items(pedidos) { pedido ->
-                Card(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(vertical = 4.dp)
-                ) {
-                    Text(pedido, modifier = Modifier.padding(16.dp))
 
+        if (pedidos.isEmpty()) {
+            Text("No tienes pedidos.")
+        }
+        if (pedidos.isNotEmpty()) {
+            LazyColumn {
+                items(pedidos) { pedido ->
+                    Card(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(vertical = 4.dp)
+                            .clickable {
+                                isDialogVisible.value = true
+                            }
+                    ) {
+                        Text(pedido.estado, modifier = Modifier.padding(8.dp))
+                        Text(pedido.horapedido, modifier = Modifier.padding(8.dp))
+                    }
+                    miAlerDialog(
+                        pedido,
+                        isDialogVisible = isDialogVisible
+                    )
                 }
             }
         }
+
+    }
+}
+
+@Composable
+fun miAlerDialog(pedidoResponse: PedidoResponse, isDialogVisible: MutableState<Boolean>) {
+    if (isDialogVisible.value) {
+        AlertDialog(
+            onDismissRequest = { isDialogVisible.value = false },
+            title = {
+                Text("Detalles del Pedido")
+            },
+            text = {
+
+                Column {
+                    Text(
+                        text = "Estado : ${pedidoResponse.estado}",
+                        Modifier.padding(vertical = 4.dp)
+                    )
+                    Text(
+                        text = "Hora y fecha Pedido : ${pedidoResponse.horapedido}",
+                        Modifier.padding(vertical = 4.dp)
+                    )
+                    pedidoResponse.detallePedido.reversed().forEach { item ->
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(vertical = 4.dp),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Text(
+                                text = item.producto.nombre,
+                                modifier = Modifier.weight(1f)
+                            )
+                            Text(
+                                text = "$${item.precio}",
+                                modifier = Modifier.padding(start = 16.dp)
+                            )
+                        }
+                        Text(
+                            text = "Total : ${pedidoResponse.total}",
+                            modifier = Modifier.align(Alignment.End)
+                        )
+                    }
+                }
+            },
+            confirmButton = {
+                Button(
+                    onClick = {
+
+                        isDialogVisible.value = false
+                    }
+                ) {
+                    Text("Aceptar")
+                }
+            },
+            modifier = Modifier.fillMaxWidth()
+        )
     }
 }

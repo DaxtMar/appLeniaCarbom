@@ -12,7 +12,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-@HiltViewModel
+/*HiltViewModel
 class CategoriaViewModel@Inject constructor(
     private val categoriaUseCase: CategoriaUseCase
 ) : ViewModel() {
@@ -31,4 +31,4 @@ class CategoriaViewModel@Inject constructor(
             _categoriaResponse.value = response
         }
     }
-}
+}*/

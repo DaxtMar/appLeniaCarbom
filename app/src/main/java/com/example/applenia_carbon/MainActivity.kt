@@ -15,6 +15,7 @@ import androidx.navigation.navArgument
 import com.example.applenia_carbon.auth.AuthViewModel
 import com.example.applenia_carbon.auth.authScreen
 import com.example.applenia_carbon.home.viewmodel.HomeViewModel
+import com.example.applenia_carbon.home.viewmodel.PedidoViewModel
 import com.example.applenia_carbon.screens.homeScreen
 import com.example.applenia_carbon.routes.AppRoutes
 import com.example.applenia_carbon.screens.RegistroScreen
@@ -26,6 +27,7 @@ import dagger.hilt.android.AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
     private val homeViewModel: HomeViewModel by viewModels()
+    private val pedidoViewModel: PedidoViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,7 +49,7 @@ class MainActivity : ComponentActivity() {
                             arguments = listOf(navArgument("id")
                             { type = NavType.IntType })
                         ) { params ->
-                            homeScreen(params.arguments?.getInt("id") ?: 0,homeViewModel)
+                            homeScreen(params.arguments?.getInt("id") ?: 0,homeViewModel,pedidoViewModel)
                         }
                         composable(AppRoutes.registroScreen.path) {
                             RegistroScreen(navigation)
