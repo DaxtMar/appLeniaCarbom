@@ -19,11 +19,9 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -48,7 +46,7 @@ import com.example.applenia_carbon.routes.AppRoutes
 import com.example.applenia_carbon.screens.viewmodel.CartViewModel
 
 @Composable
-fun homeScreen(/*id: Int, */authViewModel: AuthViewModel,
+fun homeScreen(authViewModel: AuthViewModel,
                homeViewModel: HomeViewModel,
                pedidoViewModel: PedidoViewModel
 ) {
@@ -78,8 +76,8 @@ fun homeScreen(/*id: Int, */authViewModel: AuthViewModel,
                 ) {
                     composable(route = AppRoutes.tiendaScreen.path) { backStackEntry ->
                         val categoriaIndex =
-                            backStackEntry.arguments?.getString("categoriaIndex")?.toIntOrNull()
-                        tiendaScreen(navController, categoriaIndex, homeViewModel)
+                            backStackEntry.arguments?.getString("categoryId")?.toIntOrNull()
+                        tiendaScreen(navController, homeViewModel,categoriaIndex)
                     }
                     composable(route = AppRoutes.categoriaScreen.path) {
                         categoriaScreen(navController, homeViewModel)
@@ -104,7 +102,7 @@ fun homeScreen(/*id: Int, */authViewModel: AuthViewModel,
                     }
 
                     composable(route = AppRoutes.pasarelaScreen.path) {
-                        pasarelaScreen(cartViewModel = cartViewModel, pedidoViewModel)
+                        pasarelaScreen(cartViewModel = cartViewModel, pedidoViewModel,authViewModel)
                     }
                 }
             }
@@ -141,30 +139,33 @@ fun EjemploBottomBar(
     ) {
         screens.forEachIndexed { index, opcion ->
             NavigationBarItem(
-                selected = currentDestination?.hierarchy?.any {
+                /*selected = currentDestination?.hierarchy?.any {
                     it.route == opcion.path
+                } == true,*/
+
+                selected = currentDestination?.hierarchy?.any { inf ->
+                    inf.route?.substringBefore("/") == opcion.path
                 } == true,
-                //selected = opcionSeleccionada == index,
-                //selected = opcionesApp().get(index).nombre == opcion.titulo,
+
                 colors = NavigationBarItemDefaults.colors(
                     selectedIconColor = Color.Black,
                     indicatorColor = Color.White,
                     unselectedIconColor = Color.White
                 ),
                 onClick = {
-
+/*
                     navController.navigate(opcion.path) {
                         popUpTo(navController.graph.findStartDestination().id)
                         launchSingleTop = true
 
-                    }
+                    }*/
                     //opcionSeleccionada = index
-                    /* when (opcion.titulo) {
+                    when (opcion.titulo) {
                          "Tienda" -> navController.navigate(AppRoutes.tiendaScreen.path)
                          "Categoria" -> navController.navigate(AppRoutes.categoriaScreen.path)
                          "Cuenta" -> navController.navigate(AppRoutes.cuentaScreen.path)
                          "Carrito" -> navController.navigate(AppRoutes.carritoScreen.path)
-                     }*/
+                     }
                 },
                 icon = {
                     Icon(imageVector = opcion.icon, contentDescription = "")

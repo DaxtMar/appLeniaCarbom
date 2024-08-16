@@ -15,6 +15,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import com.example.applenia_carbon.MainActivity
@@ -29,9 +30,7 @@ fun cuentaScreen(authViewModel: AuthViewModel, homeViewModel: HomeViewModel) {
 
     // Obtener los datos del usuario desde el ViewModel
     val usuario by authViewModel.loginResponse.observeAsState<LoginResponse>()
-    /*val telefono by authViewModel.telefono.observeAsState("")
-    val direccion by authViewModel.direccion.observeAsState("")*/
-    val name = usuario?.nombre
+    val idu: Int = usuario!!.id
     Column(modifier = Modifier.fillMaxSize()) {
         TabRow(
             selectedTabIndex = selectedTab,
@@ -52,7 +51,7 @@ fun cuentaScreen(authViewModel: AuthViewModel, homeViewModel: HomeViewModel) {
 
         when (selectedTab) {
             0 -> CuentaTab(usuario)
-            1 -> HistorialTab(homeViewModel)
+            1 -> HistorialTab(homeViewModel, idu)
         }
     }
 }
@@ -176,12 +175,12 @@ fun EditDialog(
 }
 
 @Composable
-fun HistorialTab(homeViewModel: HomeViewModel) {
+fun HistorialTab(homeViewModel: HomeViewModel, idu: Int) {
 
     val isDialogVisible = remember { mutableStateOf(false) }
     val pedidos by homeViewModel.pedidoResponse.observeAsState(emptyList())
     LaunchedEffect(Unit) {
-        homeViewModel.listarPedidos()
+        homeViewModel.listarPedidos(idu)
     }
     Column(
         modifier = Modifier
@@ -195,14 +194,18 @@ fun HistorialTab(homeViewModel: HomeViewModel) {
         }
         if (pedidos.isNotEmpty()) {
             LazyColumn {
-                items(pedidos) { pedido ->
+                items(pedidos.reversed()) { pedido ->
                     Card(
+                        colors = CardDefaults.cardColors(
+                            containerColor = if (pedido.estado == "pendiente") Color.Red else Color.Green
+                        ),
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(vertical = 4.dp)
                             .clickable {
                                 isDialogVisible.value = true
                             }
+
                     ) {
                         Text(pedido.estado, modifier = Modifier.padding(8.dp))
                         Text(pedido.horapedido, modifier = Modifier.padding(8.dp))
@@ -237,7 +240,7 @@ fun miAlerDialog(pedidoResponse: PedidoResponse, isDialogVisible: MutableState<B
                         text = "Hora y fecha Pedido : ${pedidoResponse.horapedido}",
                         Modifier.padding(vertical = 4.dp)
                     )
-                    pedidoResponse.detallePedido.reversed().forEach { item ->
+                    pedidoResponse.detallePedido.forEach { item ->
                         Row(
                             modifier = Modifier
                                 .fillMaxWidth()

@@ -52,7 +52,7 @@ class MainActivity : ComponentActivity() {
                             arguments = listOf(navArgument("id")
                             { type = NavType.IntType })
                         ) { params ->
-                            homeScreen(/*params.arguments?.getInt("id") ?: 0,*/authViewModel,homeViewModel,pedidoViewModel)
+                            homeScreen(authViewModel,homeViewModel,pedidoViewModel)
                         }
                         composable(AppRoutes.registroScreen.path) {
                             RegistroScreen(navigation)

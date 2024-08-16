@@ -18,8 +18,8 @@ class LeniaCarbonRepository @Inject constructor(
         return leniaCarbonService.listarProductos()
     }
 
-    suspend fun  listarPedido(): List<PedidoResponse>{
-        return leniaCarbonService.listarPedido()
+    suspend fun  listarPedido(id:Int): List<PedidoResponse>{
+        return leniaCarbonService.listarPedido(id)
     }
 
 

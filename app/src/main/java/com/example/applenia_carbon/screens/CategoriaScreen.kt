@@ -24,6 +24,7 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Icon
@@ -40,6 +41,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
@@ -51,6 +53,7 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.input.ImeAction
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
@@ -83,34 +86,55 @@ fun CategoryScreen(
     navController: NavController,
     homeViewModel: HomeViewModel
 ) {
-    //val viewModel: CategoriaViewModel = viewModel()
-    //val categorias by viewModel.categorias.observeAsState(emptyList())
     val categorias by homeViewModel.categoriaResponse.observeAsState(emptyList())
-
+    var searchText by remember { mutableStateOf("") }
     LaunchedEffect(Unit) {
         homeViewModel.listarCategorias()
     }
+    val filterCategorias = categorias.filter { it.nombre.contains(searchText, ignoreCase = true) }
 
-    LazyVerticalGrid(
-        columns = GridCells.Adaptive(150.dp),
-        verticalArrangement = Arrangement.spacedBy(16.dp),
-        horizontalArrangement = Arrangement.spacedBy(16.dp),
-        contentPadding = PaddingValues(16.dp),
-        modifier = modifier
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(8.dp)
     ) {
-        items(categorias) { category ->
-            CategoryCard(category, navController = navController)
+
+        OutlinedTextField(
+            value = searchText,
+            onValueChange = { searchText = it },
+            label = { Text("Buscar") },
+            leadingIcon = {
+                Icon(
+                    imageVector = Icons.Filled.Search,
+                    contentDescription = "Buscar",
+                    tint = Color.Gray
+                )
+            },
+            singleLine = true,
+            modifier = Modifier.fillMaxWidth(),
+            keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Search)
+        )
+
+        Spacer(modifier = Modifier.height(8.dp))
+
+        LazyVerticalGrid(
+            columns = GridCells.Adaptive(150.dp),
+            verticalArrangement = Arrangement.spacedBy(16.dp),
+            horizontalArrangement = Arrangement.spacedBy(16.dp),
+            contentPadding = PaddingValues(16.dp),
+            modifier = modifier
+        ) {
+            items(filterCategorias.size) { indice ->
+                val categoria = filterCategorias[indice]
+                CategoryCard(categoria, navController = navController)
+            }
         }
-        /*
-        items(listaCategorias) { category ->
-            CategoryCard(category, navController = navController)
-        }*/
     }
 }
 
+
 @Composable
 fun CategoryCard(
-    /*categoria: dataCategoria,*/
     categoriaResponse: CategoriaResponse,
     modifier: Modifier = Modifier,
     navController: NavController
@@ -123,6 +147,7 @@ fun CategoryCard(
         modifier = modifier
             .size(160.dp)
             .clickable {
+                navController.navigate(AppRoutes.tiendaScreen.createRoute(categoriaResponse.id))
                 // navController.navigate(AppRoutes.tiendaScreen.createRoute(categoria.idc))
             },
     ) {

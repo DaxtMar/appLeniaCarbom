@@ -10,6 +10,7 @@ import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
+import retrofit2.http.Path
 
 interface LeniaCarbonClient {
 
@@ -23,8 +24,8 @@ interface LeniaCarbonClient {
     @GET("categorias")
     suspend fun listarCategorias(): Response<List<CategoriaResponse>>
 
-    @GET("pedidos/usuario/1")
-    suspend fun listarPedidos(): Response<List<PedidoResponse>>
+    @GET("pedidos/usuario/{id}")
+    suspend fun listarPedidos(@Path("id") id:Int): Response<List<PedidoResponse>>
 
     @POST("pedidos")
     suspend fun registrarPedido(@Body pedidoRequest: PedidoRequest):Response<PedidoResponse>

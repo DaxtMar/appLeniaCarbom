@@ -54,10 +54,14 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    fun listarPedidos() {
+    fun listarPedidos(id:Int) {
         viewModelScope.launch {
-            val response = pedidoUseCase()
-            _pedidoResponse.value = response
+            try {
+                val response = pedidoUseCase(id)
+                _pedidoResponse.value = response
+            }catch (e :Exception){
+                _pedidoResponse.value = emptyList()
+            }
         }
     }
 

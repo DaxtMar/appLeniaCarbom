@@ -9,9 +9,7 @@ import javax.inject.Inject
 class PedidoUseCase @Inject constructor(
     private val repository: LeniaCarbonRepository
 ) {
-    suspend operator fun invoke(): List<PedidoResponse> {
-        return repository.listarPedido()
+    suspend operator fun invoke(id: Int): List<PedidoResponse> {
+        return repository.listarPedido(id)
     }
-
-
 }

@@ -27,9 +27,9 @@ class LeniaCarbonService @Inject constructor(
         }
     }
 
-    suspend fun listarPedido(): List<PedidoResponse> {
+    suspend fun listarPedido(id:Int): List<PedidoResponse> {
         return withContext(Dispatchers.IO) {
-            val response = leniaCarbonClient.listarPedidos()
+            val response = leniaCarbonClient.listarPedidos(id)
             response.body()!!
         }
     }

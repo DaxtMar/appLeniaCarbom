@@ -4,7 +4,6 @@ package com.example.applenia_carbon.screens
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.ScrollableDefaults
 import androidx.compose.foundation.layout.Arrangement
@@ -31,6 +30,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -46,9 +46,9 @@ import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
 import com.example.applenia_carbon.R
-import com.example.applenia_carbon.dataEjemplo.Producto
 import com.example.applenia_carbon.dataEjemplo.listaCategorias
 import com.example.applenia_carbon.dataEjemplo.listaProductos
+import com.example.applenia_carbon.home.data.network.response.CategoriaResponse
 import com.example.applenia_carbon.home.data.network.response.ProductoResponse
 import com.example.applenia_carbon.home.viewmodel.HomeViewModel
 
@@ -56,19 +56,25 @@ import com.example.applenia_carbon.routes.AppRoutes
 import com.example.applenia_carbon.screens.tienda.carousel
 
 @Composable
-fun tiendaScreen(navController: NavController, index: Int?, homeViewModel: HomeViewModel) {
-    val productos by homeViewModel.productoResponse.observeAsState(emptyList())
+fun tiendaScreen(navController: NavController, homeViewModel: HomeViewModel, categoriaIndex: Int?) {
+//    val productos by homeViewModel.productoResponse.observeAsState(emptyList())
+//
+//    val categorias by homeViewModel.categoriaResponse.observeAsState(emptyList())
     Column(
         modifier = Modifier.fillMaxSize(),
     ) {
-        LazyColumnExample(navController = navController, index = index, productos = productos)
+        LazyColumnExample(
+            navController = navController,
+            categoryId = categoriaIndex,
+            homeViewModel = homeViewModel
+            /*productos = productos, categorias = categorias*/
+        )
     }
 }
 
 @Composable
 fun ColumnItem(
     modifier: Modifier,
-    /*producto: Producto,*/
     productoResponse: ProductoResponse,
     navController: NavController
 ) {
@@ -84,7 +90,6 @@ fun ColumnItem(
         ),
         elevation = CardDefaults.cardElevation(10.dp)
     ) {
-
         Row(
             modifier.fillMaxWidth(),
             verticalAlignment = Alignment.Top,
@@ -116,7 +121,6 @@ fun ColumnItem(
                     overflow = TextOverflow.Ellipsis
                 )
                 Text(text = productoResponse.precio.toString(), fontSize = 16.sp, fontWeight = Bold)
-                //Text(text = producto.idp.toString(), fontSize = 12.sp)
             }
         }
     }
@@ -127,24 +131,35 @@ fun ColumnItem(
 fun LazyColumnExample(
     modifier: Modifier = Modifier,
     navController: NavController,
-    index: Int?,
-    productos: List<ProductoResponse>
+    categoryId: Int?,
+    homeViewModel: HomeViewModel
+    /*productos: List<ProductoResponse>,
+    categorias: List<CategoriaResponse>,*/
 ) {
+    val productos by homeViewModel.productoResponse.observeAsState(emptyList())
+    val categorias by homeViewModel.categoriaResponse.observeAsState(emptyList())
+
+    LaunchedEffect(Unit) {
+        homeViewModel.listarCategorias()
+    }
     Column {
         val listState = rememberLazyListState()
-        val indexToScroll = index ?: 0
+        
+        LaunchedEffect(categoryId) {
+            categoryId?.let { id ->
 
-        LaunchedEffect(indexToScroll) {
+                if (categoryId >= 0) {
 
-            val offset = indexToScroll * listaProductos.size
-            listState.scrollToItem(index = offset)
+                    listState.animateScrollToItem(categoryId * 5)
+                }
+            }
         }
+        //Text(text = "${categoryId} ")
         LazyColumn(
-
             Modifier.padding(start = 10.dp, end = 10.dp),
             flingBehavior = ScrollableDefaults.flingBehavior(),
-            //state = listState,
-            state = rememberLazyListState(),
+            state = listState,
+            //state = rememberLazyListState(),
             horizontalAlignment = Alignment.CenterHorizontally,
             content = {
                 item(content = {
@@ -165,7 +180,7 @@ fun LazyColumnExample(
                     Spacer(Modifier.size(10.dp))
                 })
 
-                listaCategorias.forEach { category ->
+                categorias.forEach { categoria ->
                     stickyHeader {
                         Row(
                             modifier = Modifier
@@ -174,13 +189,13 @@ fun LazyColumnExample(
                                 .padding(6.dp)
                         ) {
                             Text(
-                                text = category.name,
+                                text = categoria.nombre,
                                 fontWeight = Bold,
                                 color = Color.White
                             )
                         }
                     }
-                    items(productos.filter { it.idc == category.idc }) { producto ->
+                    items(productos.filter { it.idc == categoria.id }) { producto ->
                         Row(
                             verticalAlignment = Alignment.CenterVertically,
                             modifier = Modifier
@@ -198,6 +213,40 @@ fun LazyColumnExample(
                         }
                     }
                 }
+
+//                categorias.forEach { categoria ->
+//                    stickyHeader {
+//                        Row(
+//                            modifier = Modifier
+//                                .fillMaxWidth()
+//                                .background(Color.Red)
+//                                .padding(6.dp)
+//                        ) {
+//                            Text(
+//                                text = categoria.nombre,
+//                                fontWeight = Bold,
+//                                color = Color.White
+//                            )
+//                        }
+//                    }
+//                    items(productos.filter { it.idc == categoria.id }) { producto ->
+//                        Row(
+//                            verticalAlignment = Alignment.CenterVertically,
+//                            modifier = Modifier
+//                                .fillMaxSize()
+//                        ) {
+//                            Column(
+//                                modifier = Modifier.padding(6.dp)
+//                            ) {
+//                                ColumnItem(
+//                                    modifier,
+//                                    producto,
+//                                    navController
+//                                )
+//                            }
+//                        }
+//                    }
+//                }
             }
         )
     }
