@@ -46,9 +46,6 @@ import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
 import com.example.applenia_carbon.R
-import com.example.applenia_carbon.dataEjemplo.listaCategorias
-import com.example.applenia_carbon.dataEjemplo.listaProductos
-import com.example.applenia_carbon.home.data.network.response.CategoriaResponse
 import com.example.applenia_carbon.home.data.network.response.ProductoResponse
 import com.example.applenia_carbon.home.viewmodel.HomeViewModel
 
@@ -57,9 +54,7 @@ import com.example.applenia_carbon.screens.tienda.carousel
 
 @Composable
 fun tiendaScreen(navController: NavController, homeViewModel: HomeViewModel, categoriaIndex: Int?) {
-//    val productos by homeViewModel.productoResponse.observeAsState(emptyList())
-//
-//    val categorias by homeViewModel.categoriaResponse.observeAsState(emptyList())
+
     Column(
         modifier = Modifier.fillMaxSize(),
     ) {
@@ -67,7 +62,6 @@ fun tiendaScreen(navController: NavController, homeViewModel: HomeViewModel, cat
             navController = navController,
             categoryId = categoriaIndex,
             homeViewModel = homeViewModel
-            /*productos = productos, categorias = categorias*/
         )
     }
 }
@@ -133,8 +127,6 @@ fun LazyColumnExample(
     navController: NavController,
     categoryId: Int?,
     homeViewModel: HomeViewModel
-    /*productos: List<ProductoResponse>,
-    categorias: List<CategoriaResponse>,*/
 ) {
     val productos by homeViewModel.productoResponse.observeAsState(emptyList())
     val categorias by homeViewModel.categoriaResponse.observeAsState(emptyList())
@@ -144,12 +136,10 @@ fun LazyColumnExample(
     }
     Column {
         val listState = rememberLazyListState()
-        
+
         LaunchedEffect(categoryId) {
-            categoryId?.let { id ->
-
+            categoryId?.let {
                 if (categoryId >= 0) {
-
                     listState.animateScrollToItem(categoryId * 5)
                 }
             }
@@ -159,7 +149,6 @@ fun LazyColumnExample(
             Modifier.padding(start = 10.dp, end = 10.dp),
             flingBehavior = ScrollableDefaults.flingBehavior(),
             state = listState,
-            //state = rememberLazyListState(),
             horizontalAlignment = Alignment.CenterHorizontally,
             content = {
                 item(content = {
@@ -213,40 +202,6 @@ fun LazyColumnExample(
                         }
                     }
                 }
-
-//                categorias.forEach { categoria ->
-//                    stickyHeader {
-//                        Row(
-//                            modifier = Modifier
-//                                .fillMaxWidth()
-//                                .background(Color.Red)
-//                                .padding(6.dp)
-//                        ) {
-//                            Text(
-//                                text = categoria.nombre,
-//                                fontWeight = Bold,
-//                                color = Color.White
-//                            )
-//                        }
-//                    }
-//                    items(productos.filter { it.idc == categoria.id }) { producto ->
-//                        Row(
-//                            verticalAlignment = Alignment.CenterVertically,
-//                            modifier = Modifier
-//                                .fillMaxSize()
-//                        ) {
-//                            Column(
-//                                modifier = Modifier.padding(6.dp)
-//                            ) {
-//                                ColumnItem(
-//                                    modifier,
-//                                    producto,
-//                                    navController
-//                                )
-//                            }
-//                        }
-//                    }
-//                }
             }
         )
     }

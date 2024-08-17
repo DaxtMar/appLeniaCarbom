@@ -20,6 +20,7 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -30,7 +31,6 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavDestination
 import androidx.navigation.NavDestination.Companion.hierarchy
-import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -38,7 +38,9 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import com.example.applenia_carbon.auth.AuthViewModel
+import com.example.applenia_carbon.auth.viewmodel.AuthViewModel
+import com.example.applenia_carbon.auth.data.network.response.LoginResponse
+import com.example.applenia_carbon.core.utils.Event
 import com.example.applenia_carbon.core.utils.MenuItem
 import com.example.applenia_carbon.home.viewmodel.HomeViewModel
 import com.example.applenia_carbon.home.viewmodel.PedidoViewModel
@@ -46,14 +48,19 @@ import com.example.applenia_carbon.routes.AppRoutes
 import com.example.applenia_carbon.screens.viewmodel.CartViewModel
 
 @Composable
-fun homeScreen(authViewModel: AuthViewModel,
-               homeViewModel: HomeViewModel,
-               pedidoViewModel: PedidoViewModel
+fun homeScreen(
+    authViewModel: AuthViewModel,
+    homeViewModel: HomeViewModel,
+    pedidoViewModel: PedidoViewModel
 ) {
     val navController = rememberNavController()
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentDestination = navBackStackEntry?.destination
     val cartViewModel: CartViewModel = viewModel()
+
+    val usuario by authViewModel.obtenerPersona.observeAsState()
+
+    val iduser = usuario!!.id
 
     Scaffold(
         topBar = { MyToolBar() },
@@ -77,16 +84,16 @@ fun homeScreen(authViewModel: AuthViewModel,
                     composable(route = AppRoutes.tiendaScreen.path) { backStackEntry ->
                         val categoriaIndex =
                             backStackEntry.arguments?.getString("categoryId")?.toIntOrNull()
-                        tiendaScreen(navController, homeViewModel,categoriaIndex)
+                        tiendaScreen(navController, homeViewModel, categoriaIndex)
                     }
                     composable(route = AppRoutes.categoriaScreen.path) {
                         categoriaScreen(navController, homeViewModel)
                     }
                     composable(route = AppRoutes.cuentaScreen.path) {
-                        cuentaScreen(authViewModel, homeViewModel)
+                        cuentaScreen(authViewModel, homeViewModel, navController)
                     }
                     composable(route = AppRoutes.carritoScreen.path) {
-                        carritoScreen(cartViewModel = cartViewModel, navController)
+                        carritoScreen(cartViewModel, navController)
                     }
 
                     composable(
@@ -102,7 +109,24 @@ fun homeScreen(authViewModel: AuthViewModel,
                     }
 
                     composable(route = AppRoutes.pasarelaScreen.path) {
-                        pasarelaScreen(cartViewModel = cartViewModel, pedidoViewModel,authViewModel)
+                        pasarelaScreen(
+                            cartViewModel = cartViewModel,
+                            pedidoViewModel,
+                            iduser
+                        )
+                    }
+
+                    composable(
+                        route = AppRoutes.historiaScreen.path,
+                        arguments = listOf(navArgument("id")
+                        { type = NavType.IntType })
+                    ) { params ->
+                        historiaPorId(
+                            idpe = params.arguments?.getInt("id") ?: 0,
+                            homeViewModel,
+                            navController,
+                            iduser
+                        )
                     }
                 }
             }
@@ -161,11 +185,11 @@ fun EjemploBottomBar(
                     }*/
                     //opcionSeleccionada = index
                     when (opcion.titulo) {
-                         "Tienda" -> navController.navigate(AppRoutes.tiendaScreen.path)
-                         "Categoria" -> navController.navigate(AppRoutes.categoriaScreen.path)
-                         "Cuenta" -> navController.navigate(AppRoutes.cuentaScreen.path)
-                         "Carrito" -> navController.navigate(AppRoutes.carritoScreen.path)
-                     }
+                        "Tienda" -> navController.navigate(AppRoutes.tiendaScreen.path)
+                        "Categoria" -> navController.navigate(AppRoutes.categoriaScreen.path)
+                        "Cuenta" -> navController.navigate(AppRoutes.cuentaScreen.path)
+                        "Carrito" -> navController.navigate(AppRoutes.carritoScreen.path)
+                    }
                 },
                 icon = {
                     Icon(imageVector = opcion.icon, contentDescription = "")

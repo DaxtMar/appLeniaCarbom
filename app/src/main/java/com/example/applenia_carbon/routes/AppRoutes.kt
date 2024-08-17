@@ -12,13 +12,13 @@ sealed class AppRoutes(val path: String, val nombre: String = "") {
 
     object registroScreen : AppRoutes("registroScreen")
 
-        object tiendaScreen : AppRoutes("tiendaScreen/{categoryId}", "Tienda") {
+    object tiendaScreen : AppRoutes("tiendaScreen/{categoryId}", "Tienda") {
         fun createRoute(categoriaIndex: Int? = null): String {
             return "tiendaScreen/${categoriaIndex ?: "default"}"
         }
     }
-    //object tiendaScreen : AppRoutes("tiendaScreen", "Tienda")
 
+    //object tiendaScreen : AppRoutes("tiendaScreen", "Tienda")
     object categoriaScreen : AppRoutes("categoriaScreen", "Categoria")
     object cuentaScreen : AppRoutes("cuentaScreen", "Cuenta")
 
@@ -28,4 +28,7 @@ sealed class AppRoutes(val path: String, val nombre: String = "") {
 
     object carritoScreen : AppRoutes("carritoScreen", "Carrito")
     object pasarelaScreen : AppRoutes("pasarelaScreen")
+    object historiaScreen : AppRoutes("historiaScreen/{id}") {
+        fun paramHistoria(id: Int) = "historiaScreen/${id}"
+    }
 }

@@ -37,7 +37,6 @@ import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
 import com.example.applenia_carbon.R
 import com.example.applenia_carbon.dataEjemplo.CartItem
-import com.example.applenia_carbon.dataEjemplo.listaProductos
 import com.example.applenia_carbon.routes.AppRoutes
 import com.example.applenia_carbon.screens.viewmodel.CartViewModel
 

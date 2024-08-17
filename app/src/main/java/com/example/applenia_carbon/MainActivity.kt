@@ -7,14 +7,13 @@ import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import com.example.applenia_carbon.auth.AuthViewModel
-import com.example.applenia_carbon.auth.authScreen
+import com.example.applenia_carbon.auth.viewmodel.AuthViewModel
+import com.example.applenia_carbon.auth.view.authScreen
 import com.example.applenia_carbon.home.viewmodel.HomeViewModel
 import com.example.applenia_carbon.home.viewmodel.PedidoViewModel
 import com.example.applenia_carbon.screens.homeScreen

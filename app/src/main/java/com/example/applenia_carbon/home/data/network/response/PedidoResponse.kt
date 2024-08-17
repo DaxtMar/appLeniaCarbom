@@ -7,7 +7,7 @@ data class PedidoResponse(
     val total: Double,
     val usuario: Usuario,
     val metodoPago: MetodoPago,
-    val detallePedido: List<DetallePedido>,
+    val detallePedido: List<DetallePedidoResponse>,
     val pagoCon: String
 )
 
@@ -28,7 +28,7 @@ data class MetodoPago(
 )
 
 
-data class DetallePedido(
+data class DetallePedidoResponse(
     val idDetalleVenta: Int,
     val producto: Producto,
     val cantidad: Double,

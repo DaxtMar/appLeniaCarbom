@@ -54,13 +54,12 @@ import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.style.TextAlign
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
 import com.example.applenia_carbon.R
-import com.example.applenia_carbon.dataEjemplo.dataCategoria
-import com.example.applenia_carbon.dataEjemplo.listaCategorias
 import com.example.applenia_carbon.home.data.network.response.CategoriaResponse
 //import com.example.applenia_carbon.home.viewmodel.CategoriaViewModel
 import com.example.applenia_carbon.home.viewmodel.HomeViewModel
@@ -139,7 +138,6 @@ fun CategoryCard(
     modifier: Modifier = Modifier,
     navController: NavController
 ) {
-    //val image: Painter = painterResource(id = categoria.imageResId)
     Surface(
         color = Color.Transparent,
         shape = MaterialTheme.shapes.extraLarge,
@@ -148,7 +146,6 @@ fun CategoryCard(
             .size(160.dp)
             .clickable {
                 navController.navigate(AppRoutes.tiendaScreen.createRoute(categoriaResponse.id))
-                // navController.navigate(AppRoutes.tiendaScreen.createRoute(categoria.idc))
             },
     ) {
         Box(
@@ -176,7 +173,10 @@ fun CategoryCard(
                 text = categoriaResponse.nombre,
                 style = TextStyle(color = Color.White, fontSize = 20.sp),
                 fontWeight = FontWeight.Bold,
-                modifier = Modifier.align(Alignment.Center)
+                textAlign = TextAlign.Center,
+                modifier = Modifier
+                    .align(Alignment.Center)
+
             )
         }
     }

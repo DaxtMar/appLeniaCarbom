@@ -22,28 +22,24 @@ import androidx.compose.ui.unit.sp
 import com.example.applenia_carbon.screens.viewmodel.CartViewModel
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.text.input.KeyboardType
-import com.example.applenia_carbon.auth.AuthViewModel
-import com.example.applenia_carbon.auth.data.network.response.LoginResponse
 import com.example.applenia_carbon.home.data.network.request.DetallePedido
 import com.example.applenia_carbon.home.data.network.request.PedidoRequest
 import com.example.applenia_carbon.home.data.network.request.Producto
 import com.example.applenia_carbon.home.viewmodel.PedidoViewModel
 
-//private val viewModel: PedidoViewModel = viewModels()
-
 @Composable
 fun pasarelaScreen(
     cartViewModel: CartViewModel,
     pedidoViewModel: PedidoViewModel,
-    authViewModel: AuthViewModel
+    //authViewModel: AuthViewModel
+    iduser:Int
 ) {
-    val usuario by authViewModel.loginResponse.observeAsState<LoginResponse>()
-    val iduser = usuario!!.id
+
+
     val cartItems = cartViewModel.cartItems
     val total = cartItems.sumOf { it.producto.precio * it.cantidad }
     val totalFormateado = String.format("%.2f", total)
@@ -101,9 +97,9 @@ fun pasarelaScreen(
             }
         }
         val pagoconval = if (selectedOption == 1) {
-            "$numeroTelefono"
+            numeroTelefono
         } else {
-            "$tarjetaCredito"
+            tarjetaCredito
         }
 
         Text(text = "Detalles del carrito")
@@ -138,12 +134,7 @@ fun pasarelaScreen(
                 )
                 Spacer(modifier = Modifier.width(8.dp))
                 Text(
-                    text = "${
-                        String.format(
-                            "%.2f",
-                            cartItem.producto.precio * cartItem.cantidad
-                        )
-                    }",
+                    text = "${String.format("%.2f", cartItem.producto.precio * cartItem.cantidad)}",
                     fontSize = 18.sp,
                     fontWeight = FontWeight.Bold
                 )
@@ -164,6 +155,7 @@ fun pasarelaScreen(
 
         pedidoResponse?.let { response ->
             Text(text = "Pedido registrado : ${response.horapedido}")
+            cartViewModel.crearCart()
         }
         Button(
             onClick = {

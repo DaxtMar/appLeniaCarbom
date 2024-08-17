@@ -18,19 +18,32 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
+import androidx.navigation.NavController
 import com.example.applenia_carbon.MainActivity
 import com.example.applenia_carbon.auth.data.network.response.LoginResponse
-import com.example.applenia_carbon.auth.AuthViewModel
-import com.example.applenia_carbon.home.data.network.response.PedidoResponse
+import com.example.applenia_carbon.auth.viewmodel.AuthViewModel
+import com.example.applenia_carbon.core.utils.Event
 import com.example.applenia_carbon.home.viewmodel.HomeViewModel
+import com.example.applenia_carbon.routes.AppRoutes
 
 @Composable
-fun cuentaScreen(authViewModel: AuthViewModel, homeViewModel: HomeViewModel) {
+fun cuentaScreen(
+    authViewModel: AuthViewModel,
+    homeViewModel: HomeViewModel,
+    navController: NavController
+) {
     var selectedTab by remember { mutableStateOf(0) }
+    /*
+    val usuario by authViewModel.loginResponse.observeAsState<Event<LoginResponse>>()
+    var user: LoginResponse? = null
+    usuario?.getContentNotChange()?.let { response ->
+        if (response.success) {
+            user = response
+        }
+    }*/
 
-    // Obtener los datos del usuario desde el ViewModel
-    val usuario by authViewModel.loginResponse.observeAsState<LoginResponse>()
-    val idu: Int = usuario!!.id
+    val usuario by authViewModel.obtenerPersona.observeAsState()
+    val idusuario: Int = usuario!!.id
     Column(modifier = Modifier.fillMaxSize()) {
         TabRow(
             selectedTabIndex = selectedTab,
@@ -51,7 +64,7 @@ fun cuentaScreen(authViewModel: AuthViewModel, homeViewModel: HomeViewModel) {
 
         when (selectedTab) {
             0 -> CuentaTab(usuario)
-            1 -> HistorialTab(homeViewModel, idu)
+            1 -> HistorialTab(homeViewModel, idusuario, navController)
         }
     }
 }
@@ -175,12 +188,16 @@ fun EditDialog(
 }
 
 @Composable
-fun HistorialTab(homeViewModel: HomeViewModel, idu: Int) {
+fun HistorialTab(
+    homeViewModel: HomeViewModel,
+    idusuario: Int,
+    navController: NavController
+) {
 
-    val isDialogVisible = remember { mutableStateOf(false) }
+    //val isDialogVisible = remember { mutableStateOf(false) }
     val pedidos by homeViewModel.pedidoResponse.observeAsState(emptyList())
     LaunchedEffect(Unit) {
-        homeViewModel.listarPedidos(idu)
+        homeViewModel.listarPedidos(idusuario)
     }
     Column(
         modifier = Modifier
@@ -203,17 +220,19 @@ fun HistorialTab(homeViewModel: HomeViewModel, idu: Int) {
                             .fillMaxWidth()
                             .padding(vertical = 4.dp)
                             .clickable {
-                                isDialogVisible.value = true
+                                //isDialogVisible.value = true
+                                navController.navigate(AppRoutes.historiaScreen.paramHistoria(pedido.id))
                             }
 
                     ) {
                         Text(pedido.estado, modifier = Modifier.padding(8.dp))
                         Text(pedido.horapedido, modifier = Modifier.padding(8.dp))
                     }
+                    /*
                     miAlerDialog(
                         pedido,
                         isDialogVisible = isDialogVisible
-                    )
+                    )*/
                 }
             }
         }
@@ -221,6 +240,7 @@ fun HistorialTab(homeViewModel: HomeViewModel, idu: Int) {
     }
 }
 
+/*
 @Composable
 fun miAlerDialog(pedidoResponse: PedidoResponse, isDialogVisible: MutableState<Boolean>) {
     if (isDialogVisible.value) {
@@ -276,4 +296,4 @@ fun miAlerDialog(pedidoResponse: PedidoResponse, isDialogVisible: MutableState<B
             modifier = Modifier.fillMaxWidth()
         )
     }
-}
+}*/

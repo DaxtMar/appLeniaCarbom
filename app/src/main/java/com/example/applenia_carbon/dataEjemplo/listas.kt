@@ -2,7 +2,7 @@ package com.example.applenia_carbon.dataEjemplo
 
 import com.example.applenia_carbon.R
 
-
+/*
 val listaCategorias = listOf(
     dataCategoria(1,R.drawable.pro1, "Promociones"),
     dataCategoria(2,R.drawable.fc1, "Festival de cuartos"),
@@ -272,5 +272,4 @@ val listaProductos = listOf(
         "Un pollo a la brasa entero jugoso + 1/4 de pollo a la brasa + cocantes papas fritas",
         80.0
     )
-
-)
+)*/
