@@ -32,4 +32,8 @@ class PedidoViewModel @Inject constructor(
             }
         }
     }
+
+    fun resetPedidoResponse() {
+        _regpedidoResponse.value = null
+    }
 }

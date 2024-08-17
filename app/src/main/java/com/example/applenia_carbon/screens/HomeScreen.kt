@@ -75,7 +75,7 @@ fun homeScreen(
                 modifier = Modifier
                     .padding(initialpadding)
                     .fillMaxSize(),
-                contentAlignment = Alignment.Center
+                //contentAlignment = Alignment.Center
             ) {
                 NavHost(
                     navController = navController,

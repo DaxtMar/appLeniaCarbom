@@ -63,14 +63,14 @@ fun cuentaScreen(
         }
 
         when (selectedTab) {
-            0 -> CuentaTab(usuario)
+            0 -> CuentaTab(usuario, navController)
             1 -> HistorialTab(homeViewModel, idusuario, navController)
         }
     }
 }
 
 @Composable
-fun CuentaTab(usuario: LoginResponse?) {
+fun CuentaTab(usuario: LoginResponse?, navController: NavController) {
     var showEditDialog by remember { mutableStateOf(false) }
     var selectedItem by remember { mutableStateOf("") }
     var userData by remember {
@@ -130,6 +130,10 @@ fun CuentaTab(usuario: LoginResponse?) {
             onClick = {
                 // Manejar cierre de sesión
                 (context as? MainActivity)?.finish() // Cierra la actividad actual
+                /*navController.navigate(AppRoutes.loginScreen.path) {
+                    popUpTo(navController.graph.startDestinationId)
+                    { inclusive = true }
+                }*/
             }
         ) {
             Text("Cerrar sesión")
