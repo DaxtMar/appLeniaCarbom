@@ -1,4 +1,4 @@
-package com.example.applenia_carbon.screens
+package com.example.applenia_carbon.home.screens
 
 import android.os.Handler
 import androidx.compose.animation.core.animateDpAsState
@@ -14,7 +14,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.applenia_carbon.R
-import com.example.applenia_carbon.routes.AppRoutes
+import com.example.applenia_carbon.core.routes.AppRoutes
 
 @Composable
 fun WelcomeScreen(navController: NavController) {

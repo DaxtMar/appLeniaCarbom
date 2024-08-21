@@ -1,4 +1,4 @@
-package com.example.applenia_carbon.routes
+package com.example.applenia_carbon.core.routes
 
 sealed class AppRoutes(val path: String, val nombre: String = "") {
     object welcomeScreen : AppRoutes("welcomeScreen")
@@ -30,5 +30,9 @@ sealed class AppRoutes(val path: String, val nombre: String = "") {
     object pasarelaScreen : AppRoutes("pasarelaScreen")
     object historiaScreen : AppRoutes("historiaScreen/{id}") {
         fun paramHistoria(id: Int) = "historiaScreen/${id}"
+    }
+    //mapa
+    object mapaScreen : AppRoutes("mapaScreen/{texto}") {
+        fun paramRuta(texto: String) = "mapaScreen/${texto}"
     }
 }

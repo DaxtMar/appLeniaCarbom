@@ -1,4 +1,4 @@
-package com.example.applenia_carbon.screens
+package com.example.applenia_carbon.home.screens
 
 
 import androidx.compose.foundation.layout.Box
@@ -44,8 +44,9 @@ import com.example.applenia_carbon.core.utils.Event
 import com.example.applenia_carbon.core.utils.MenuItem
 import com.example.applenia_carbon.home.viewmodel.HomeViewModel
 import com.example.applenia_carbon.home.viewmodel.PedidoViewModel
-import com.example.applenia_carbon.routes.AppRoutes
-import com.example.applenia_carbon.screens.viewmodel.CartViewModel
+import com.example.applenia_carbon.core.routes.AppRoutes
+import com.example.applenia_carbon.home.screens.mapa.MapaConRuta
+import com.example.applenia_carbon.home.screens.viewmodel.CartViewModel
 
 @Composable
 fun homeScreen(
@@ -128,6 +129,17 @@ fun homeScreen(
                             iduser
                         )
                     }
+                    //mapa
+                    composable(
+                        route = AppRoutes.mapaScreen.path,
+                        arguments = listOf(navArgument("texto")
+                        { type = NavType.StringType })
+                    ) { params ->
+                        MapaConRuta(
+                            texto = params.arguments?.getString("texto") ?: "",
+                            navController
+                        )
+                    }
                 }
             }
         })
@@ -137,7 +149,7 @@ fun homeScreen(
 @Composable
 fun MyToolBar() {
     TopAppBar(title = { Text(text = "Leña y Carbón") }, colors = TopAppBarDefaults.topAppBarColors(
-        containerColor = Color.Red,
+        containerColor = Color(0xFFC12B2A),
         titleContentColor = Color.White
     ),
         navigationIcon = {
@@ -153,19 +165,13 @@ fun EjemploBottomBar(
     navController: NavHostController
 ) {
     val screens = opcionesMenu()
-    var opcionSeleccionada by remember {
-        mutableStateOf(0)
-    }
     BottomAppBar(
-        containerColor = Color.Red,
+        containerColor = Color(0xFFC12B2A),
         contentColor = Color.White,
         tonalElevation = 5.dp
     ) {
         screens.forEachIndexed { index, opcion ->
             NavigationBarItem(
-                /*selected = currentDestination?.hierarchy?.any {
-                    it.route == opcion.path
-                } == true,*/
 
                 selected = currentDestination?.hierarchy?.any { inf ->
                     inf.route?.substringBefore("/") == opcion.path
@@ -177,13 +183,6 @@ fun EjemploBottomBar(
                     unselectedIconColor = Color.White
                 ),
                 onClick = {
-/*
-                    navController.navigate(opcion.path) {
-                        popUpTo(navController.graph.findStartDestination().id)
-                        launchSingleTop = true
-
-                    }*/
-                    //opcionSeleccionada = index
                     when (opcion.titulo) {
                         "Tienda" -> navController.navigate(AppRoutes.tiendaScreen.path)
                         "Categoria" -> navController.navigate(AppRoutes.categoriaScreen.path)

@@ -17,7 +17,8 @@ data class Usuario(
     val email: String,
     val password: String,
     val direccion: String,
-    val telefono: String
+    val telefono: String,
+    val rutadata :String
 )
 
 

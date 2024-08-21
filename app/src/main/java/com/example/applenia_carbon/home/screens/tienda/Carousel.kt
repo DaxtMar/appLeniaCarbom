@@ -1,4 +1,4 @@
-package com.example.applenia_carbon.screens.tienda
+package com.example.applenia_carbon.home.screens.tienda
 
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.Image

@@ -1,4 +1,4 @@
-package com.example.applenia_carbon.screens
+package com.example.applenia_carbon.home.screens
 
 
 import androidx.compose.foundation.ExperimentalFoundationApi
@@ -49,8 +49,8 @@ import com.example.applenia_carbon.R
 import com.example.applenia_carbon.home.data.network.response.ProductoResponse
 import com.example.applenia_carbon.home.viewmodel.HomeViewModel
 
-import com.example.applenia_carbon.routes.AppRoutes
-import com.example.applenia_carbon.screens.tienda.carousel
+import com.example.applenia_carbon.core.routes.AppRoutes
+import com.example.applenia_carbon.home.screens.tienda.carousel
 
 @Composable
 fun tiendaScreen(navController: NavController, homeViewModel: HomeViewModel, categoriaIndex: Int?) {
@@ -174,7 +174,7 @@ fun LazyColumnExample(
                         Row(
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .background(Color.Red)
+                                .background(Color(0xFFC12B2A))
                                 .padding(6.dp)
                         ) {
                             Text(

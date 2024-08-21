@@ -1,9 +1,9 @@
-package com.example.applenia_carbon.screens.viewmodel
+package com.example.applenia_carbon.home.screens.viewmodel
 
 import androidx.compose.runtime.mutableStateListOf
 import androidx.lifecycle.ViewModel
-import com.example.applenia_carbon.dataEjemplo.CartItem
 import com.example.applenia_carbon.home.data.network.response.ProductoResponse
+import com.example.applenia_carbon.home.screens.modelo.CartItem
 
 class CartViewModel : ViewModel() {
 

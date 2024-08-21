@@ -12,7 +12,6 @@ data class DetallePedido(
     val cantidad: Int
 )
 
-
 data class Producto(
     val id: Int
 )

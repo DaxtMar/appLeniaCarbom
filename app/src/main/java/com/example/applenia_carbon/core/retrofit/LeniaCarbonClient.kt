@@ -1,7 +1,9 @@
 package com.example.applenia_carbon.core.retrofit
 
 import com.example.applenia_carbon.auth.data.network.request.LoginRequest
+import com.example.applenia_carbon.auth.data.network.request.RegistroRequest
 import com.example.applenia_carbon.auth.data.network.response.LoginResponse
+import com.example.applenia_carbon.auth.data.network.response.RegistroResponse
 import com.example.applenia_carbon.home.data.network.request.PedidoRequest
 import com.example.applenia_carbon.home.data.network.response.CategoriaResponse
 import com.example.applenia_carbon.home.data.network.response.PedidoResponse
@@ -17,6 +19,8 @@ interface LeniaCarbonClient {
     @POST("auth/login")
     suspend fun login(@Body loginRequest: LoginRequest): Response<LoginResponse>
 
+    @POST("usuarios/registro")
+    suspend fun registro(@Body registroRequest: RegistroRequest): Response<RegistroResponse>
 
     @GET("productos")
     suspend fun listarProductos(): Response<List<ProductoResponse>>

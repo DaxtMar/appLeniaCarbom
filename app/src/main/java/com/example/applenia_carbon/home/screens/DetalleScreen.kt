@@ -1,4 +1,4 @@
-package com.example.applenia_carbon.screens
+package com.example.applenia_carbon.home.screens
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -19,6 +19,7 @@ import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.ArrowBackIosNew
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.SnackbarDuration
@@ -45,7 +46,7 @@ import coil.request.ImageRequest
 import com.example.applenia_carbon.R
 import com.example.applenia_carbon.home.data.network.response.ProductoResponse
 import com.example.applenia_carbon.home.viewmodel.HomeViewModel
-import com.example.applenia_carbon.screens.viewmodel.CartViewModel
+import com.example.applenia_carbon.home.screens.viewmodel.CartViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
@@ -123,19 +124,14 @@ fun ProductImage(imageUrl: String, navController: NavController) {
 fun ProductDetails(producto: ProductoResponse) {
     Column {
 
-        Text(
-            text = producto.nombre, fontSize = 18.sp, fontWeight = Bold
-        )
+        Text(text = producto.nombre, fontSize = 18.sp, fontWeight = Bold)
 
         Spacer(modifier = Modifier.height(4.dp))
 
-        Text(
-            text = producto.descripcion,
-        )
+        Text(text = producto.descripcion)
+
         Spacer(modifier = Modifier.height(8.dp))
-        Text(
-            text = "S/" + producto.precio.toString(), fontSize = 16.sp, fontWeight = Bold
-        )
+        Text(text = "S/" + producto.precio.toString(), fontSize = 16.sp, fontWeight = Bold)
     }
 }
 
@@ -159,8 +155,12 @@ fun ActionButtons(
                     )
                 }
             },
-            modifier
-            = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
+            colors = ButtonDefaults.buttonColors(
+                containerColor = Color(0xFFC12B2A),
+                contentColor = Color.White
+            ),
+            shape = RoundedCornerShape(8.dp)
         ) {
             Text("Agregar al carrito")
         }

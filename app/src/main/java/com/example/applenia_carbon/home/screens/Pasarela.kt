@@ -1,7 +1,9 @@
-package com.example.applenia_carbon.screens
+package com.example.applenia_carbon.home.screens
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -36,16 +38,18 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.applenia_carbon.screens.viewmodel.CartViewModel
+import com.example.applenia_carbon.home.screens.viewmodel.CartViewModel
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
+import com.example.applenia_carbon.core.utils.numConDosDecimales
 import com.example.applenia_carbon.home.data.network.request.DetallePedido
 import com.example.applenia_carbon.home.data.network.request.PedidoRequest
 import com.example.applenia_carbon.home.data.network.request.Producto
@@ -64,9 +68,9 @@ fun pasarelaScreen(
     val totalFormateado = String.format("%.2f", total)
 
     val pedidoResponse by pedidoViewModel.regpedidoResponse.collectAsState()
-    val error by pedidoViewModel.error.collectAsState()
-    val scrollState = rememberScrollState()
 
+    val scrollState = rememberScrollState()
+    val detalle = mutableListOf<DetallePedido>()
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -78,52 +82,70 @@ fun pasarelaScreen(
         var isLoading by remember { mutableStateOf(false) }
         var textr by remember { mutableStateOf("") }
 
-        Text(text = "Detalles del carrito", fontSize = 18.sp, fontWeight = FontWeight.Bold)
-        Spacer(modifier = Modifier.height(10.dp))
+        // Cuadro transparente con bordes de color
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp)
+                .border(
+                    width = 3.dp,
+                    brush = Brush.horizontalGradient(
+                        colors = listOf(Color.Magenta, Color.Green)
+                    ),
+                    shape = RoundedCornerShape(8.dp)
+                )
+                .background(Color.Transparent)
+                .padding(16.dp)
+        ) {
+            Column {
+                Text(text = "Detalles del carrito", fontSize = 18.sp, fontWeight = FontWeight.Bold)
+                Spacer(modifier = Modifier.height(10.dp))
 
-        val detalle = mutableListOf<DetallePedido>()
 
-        cartItems.forEach { cartItem ->
-            val nuevoDetalle =
-                DetallePedido(
-                    producto = Producto(id = cartItem.producto.idp),
-                    cantidad = cartItem.cantidad
-                )
-            detalle.add(nuevoDetalle)
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = 6.dp),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
+
+                cartItems.forEach { cartItem ->
+                    val nuevoDetalle =
+                        DetallePedido(
+                            producto = Producto(id = cartItem.producto.idp),
+                            cantidad = cartItem.cantidad
+                        )
+                    detalle.add(nuevoDetalle)
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(vertical = 6.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Text(
+                            text = cartItem.producto.nombre,
+                            fontSize = 16.sp,
+                            modifier = Modifier.weight(1f)
+                        )
+                        Spacer(modifier = Modifier.width(6.dp))
+                        Text(
+                            text = "${cartItem.cantidad} x  ${cartItem.producto.precio}",
+                            fontSize = 16.sp,
+                            modifier = Modifier.weight(1f)
+                        )
+                        Spacer(modifier = Modifier.width(6.dp))
+                        Text(
+                            text = "${numConDosDecimales(cartItem.producto.precio * cartItem.cantidad)}",
+                            fontSize = 17.sp,
+                            fontWeight = FontWeight.Bold
+                        )
+                    }
+                }
+
+                Spacer(modifier = Modifier.height(10.dp))
+
                 Text(
-                    text = cartItem.producto.nombre,
-                    fontSize = 16.sp,
-                    modifier = Modifier.weight(1f)
-                )
-                Spacer(modifier = Modifier.width(6.dp))
-                Text(
-                    text = "${cartItem.cantidad} x  ${cartItem.producto.precio}",
-                    fontSize = 16.sp,
-                    modifier = Modifier.weight(1f)
-                )
-                Spacer(modifier = Modifier.width(6.dp))
-                Text(
-                    text = "${String.format("%.2f", cartItem.producto.precio * cartItem.cantidad)}",
-                    fontSize = 17.sp,
-                    fontWeight = FontWeight.Bold
+                    text = "Total a Pagar: S/$totalFormateado",
+                    fontSize = 18.sp,
+                    fontWeight = FontWeight.Bold,
+                    modifier = Modifier.align(Alignment.End)
                 )
             }
         }
-
-        Spacer(modifier = Modifier.height(10.dp))
-
-        Text(
-            text = "Total a Pagar: S/$totalFormateado",
-            fontSize = 18.sp,
-            fontWeight = FontWeight.Bold,
-            modifier = Modifier.align(Alignment.End)
-        )
 
         Spacer(modifier = Modifier.height(8.dp))
 
@@ -188,8 +210,12 @@ fun pasarelaScreen(
                     isLoading = false
                 }
             },
-            modifier
-            = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
+            colors = ButtonDefaults.buttonColors(
+                containerColor = Color(0xFFC12B2A),
+                contentColor = Color.White
+            ),
+            shape = RoundedCornerShape(8.dp)
         ) {
             Text("Pagar")
         }
